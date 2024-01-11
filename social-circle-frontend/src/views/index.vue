@@ -29,7 +29,7 @@
             </div>
             <div class="post-content">
               <p>{{ post.content }}</p>
-              <img v-if="post.image" class="post-image" :src="post.image" alt="说说图片">
+              <img v-if="post.image" class="post-image" ref="img" :src="post.image" @click="toggleFullscreen" alt="说说图片">
             </div>
             <div class="post-footer">
               <!-- 显示发布时间 -->
@@ -85,7 +85,8 @@ export default {
       backgroundImage: '', // 背景图片的路径变量
       posts: [],
       showCommentInput: false,    //默认不显示输入框
-      newComment: ""       //评论内容
+      newComment: "",       //评论内容
+      isFullscreen: false,
     };
   },
   created() {
@@ -116,7 +117,7 @@ export default {
             avatar: './src/assets/vue.svg',
             nickname: 'Vue'
           },
-          content: '这也是一条朋友圈说说',
+          content: '今天天气甚是不错，风儿在耳边喧嚣，云儿在天空飘荡。',
           image: '../src/assets/宇宙.png',
           liked: false,
           comments: [
@@ -206,7 +207,10 @@ export default {
         second: '2-digit'
       };
       return new Intl.DateTimeFormat('zh-CN', options).format(time);
-    }
+    },
+    toggleFullscreen(event) {
+      this.$message.error("图片查看功能-未完成")
+    },
   }
 };
 </script>
@@ -290,10 +294,23 @@ img.post-avatar:hover{
 
 .post-nickname {
   margin-left: 10px;
+
+  color: #546993;
+  max-width: 300px;
+  font-size: 18px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 30px;
+  cursor: pointer;
+  display: inline-block;
 }
 
 .post-content {
-  flex-grow: 1;
+  color: #090909;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .post-image {
