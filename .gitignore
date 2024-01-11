@@ -1,0 +1,23 @@
+# 主目录通用规则 
+*.log
+node_modules/  
+.DS_Store
+.idea
+
+# 后端项目social-circle-backend的规则
+./social-circle-backend/target/   
+./social-circle-backend/*.jar  
+./social-circle-backend/*.war
+./social-circle-backend/.idea/
+./social-circle-backend/*.iml
+./social-circle-backend/.classpath
+./social-circle-backend/.project
+./social-circle-backend/.settings
+   
+
+# 前端项目social-circle-frontend的规则   
+./social-circle-frontend/node_modules   
+./social-circle-frontend/dist/  
+./social-circle-frontend/*.log
+./social-circle-frontend/.DS_Store 
+./social-circle-frontend/.vscode

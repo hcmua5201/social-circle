@@ -237,15 +237,30 @@ export default {
 }
 
 .user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid #fff; /* 添加边框 */
+  width: 70px;
+  height: 70px;
+  margin-right: 10px;
+  margin-top: 16px;
+  border: 3px solid #fff; /* 添加边框 */
 }
 
 .user-nickname {
-  margin-left: -100px;
-  font-size: 10px;
+  margin-left: -140px;
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  padding-right: 12px;
+}
+
+img.post-avatar{
+  margin-left: 10px;
+  transform: rotate(0deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+img.post-avatar:hover{
+  transform: rotate(180deg);
+  transition: transform 0.5s ease-in-out;
 }
 
 .background-image-container {
@@ -258,7 +273,7 @@ export default {
 }
 
 .friend-circle {
-  margin-top: 20px;
+  margin-top: 44px;
 }
 
 .post {
@@ -293,16 +308,25 @@ export default {
 }
 
 .post-time {
-  color: #888;
+  color: #959595;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: bold;
 }
 
 .post-comments {
   margin-top: 10px;
+  background-color: #f3f3f5;
 }
 
 .post-likes,
 .post-comments-list {
   margin-top: 5px;
+  color: #546993;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 20px;
 }
 
 .post-comment {
