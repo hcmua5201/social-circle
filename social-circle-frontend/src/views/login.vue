@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import axios from "axios";
+axios.defaults.baseURL='/api'
 export default {
   data() {
     return {
@@ -41,12 +43,25 @@ export default {
       if (lowerCaseInput.includes('@qq.com')) {
         // 邮箱登录
         requestData = { email: this.loginForm.usernameOrEmail, password: this.loginForm.password };
-        alert("邮箱");
-        this.$router.push('/index');
+        alert("邮箱登录方式，正在开发");
+        // this.$router.push('/index');
       } else {
         // 用户名密码登录
         requestData = { username: this.loginForm.usernameOrEmail, password: this.loginForm.password };
-        this.$router.push('/index');
+        axios({
+          method:'post',
+          url:'/api/users/loginByUserAndPwd',
+          params:{username:requestData.username,password:requestData.password}
+        }).then((response)=>{
+          console.log(response.data.code)
+          if (response.data.code===222){
+            this.$message.success(response.data.msg)
+            this.$router.push('/index');
+          }else {
+            this.$message.error(response.data.msg)
+          }
+        })
+
       }
     },
     goToRegister() {

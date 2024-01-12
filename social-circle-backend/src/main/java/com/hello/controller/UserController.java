@@ -20,9 +20,16 @@ public class UserController {
     private UserService userService;
 
 
-    @PostMapping("/login")
-    public String login(){
-        return "login111";
+    @PostMapping("/loginByUserAndPwd")
+    public Result loginByUserAndPwd(@RequestParam("username")String username,
+                                @RequestParam("password") String password){
+        System.out.println("登录用户名："+username);
+        System.out.println("登录密码："+password);
+        User login = userService.loginByUserAndPwd(username, password);
+        if (login!=null){
+            return new Result(222,"登录成功",login);
+        }
+        return new Result(444,"登录失败",null);
     }
 
 

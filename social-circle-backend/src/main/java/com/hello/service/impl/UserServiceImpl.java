@@ -15,6 +15,11 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
+    public User loginByUserAndPwd(String username, String password) {
+        return userMapper.loginByUserAndPwd(username,password);
+    }
+
+    @Override
     public String getBackgroundImagePathById(Long userId) {
         return userMapper.getBackgroundImagePathById(userId);
     }

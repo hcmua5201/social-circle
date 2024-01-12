@@ -1,12 +1,13 @@
 package com.hello.service;
 
 import com.hello.entry.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface UserService {
 
-
+    User loginByUserAndPwd(@Param("username") String username, @Param("password") String password);
     String getBackgroundImagePathById(Long userId);
     void addUser(User user);
 

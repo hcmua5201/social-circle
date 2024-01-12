@@ -31,6 +31,8 @@ public class User {
     private String backgroundImagePath;
 
 
+    private String email;
+
 
 }
 
