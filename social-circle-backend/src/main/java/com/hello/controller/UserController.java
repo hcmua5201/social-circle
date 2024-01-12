@@ -20,6 +20,10 @@ public class UserController {
     private UserService userService;
 
 
+    @PostMapping("/login")
+
+
+
     @GetMapping("/background-image/{userId}")
     public String getBackgroundImage(@PathVariable Long userId) {
         System.out.println("登录用户id"+userId);
