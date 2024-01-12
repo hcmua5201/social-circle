@@ -20,6 +20,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User loginByEmailAndPwd(String email, String password) {
+        return userMapper.loginByEmailAndPwd(email, password);
+    }
+
+    @Override
     public String getBackgroundImagePathById(Long userId) {
         return userMapper.getBackgroundImagePathById(userId);
     }

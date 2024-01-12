@@ -29,7 +29,20 @@ public class UserController {
         if (login!=null){
             return new Result(222,"登录成功",login);
         }
-        return new Result(444,"登录失败",null);
+        return new Result(444,"用户不存在,用户名或密码错误",null);
+    }
+
+
+    @PostMapping("/loginByEmailAndPwd")
+    public Result loginByEmailAndPwd(@RequestParam("email")String email,
+                                    @RequestParam("password") String password){
+        System.out.println("登录邮箱："+email);
+        System.out.println("登录密码："+password);
+        User emaillogin = userService.loginByEmailAndPwd(email, password);
+        if (emaillogin!=null){
+            return new Result(222,"登录成功",emaillogin);
+        }
+        return new Result(444,"用户不存在,邮箱或密码错误",null);
     }
 
 
