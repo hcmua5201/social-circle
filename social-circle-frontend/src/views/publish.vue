@@ -8,7 +8,7 @@
         <div class="left" @click="backIndex">取消</div>
         <div class="right" @click="publish">发布</div>
       </div>
-        <textarea class="text" placeholder="这一刻的想法..." cols="30" rows="10"></textarea>
+        <textarea class="text" placeholder="这一刻的想法..."></textarea>
     </div>
 
     <div class="bottom">
@@ -66,6 +66,7 @@ export default {
   border-bottom: 1px solid #BCBCBC;
   width: 94%;
   margin: 0 auto;
+  height: 100%;
 }
 
 .container .top .header{
@@ -103,12 +104,13 @@ export default {
 .container .top textarea.text{
   display: block;
   width: 96%;
-  height: 100px;
-  margin-top: 24px;
+  margin-top: 34px;
   border: none;
   color: #232323;
   font-size: 20px;
   outline: none;
+  text-indent: 1em;
+  min-height: 100px;
 }
 
 .container .bottom{
@@ -116,8 +118,7 @@ export default {
 }
 .container .bottom #picInput{
   width: 90%;
-  margin: 0 auto;
-  margin-top: 12px;
+  margin: 12px auto 0;
 }
 
 .container .bottom #picInput img{
