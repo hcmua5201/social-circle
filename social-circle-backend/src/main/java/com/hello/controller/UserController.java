@@ -57,6 +57,11 @@ public class UserController {
     @PostMapping("/add")
     public Result addUser(@RequestBody User user) {
         System.out.println("新增数据："+user);
+//        设置默认头像和默认背景壁纸
+        user.setBackgroundImagePath("https://s2.loli.net/2024/01/13/EoTMmLukXPOetAh.png");
+        if (user.getAvatar() == null||user.getAvatar().equals("")){
+            user.setAvatar("https://s2.loli.net/2024/01/13/lfUKxHnX3wOFWJT.jpg");
+        }
         userService.addUser(user);
         return new Result(222, "用户添加成功", null);
     }

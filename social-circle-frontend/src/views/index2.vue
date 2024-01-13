@@ -1,66 +1,66 @@
 <template>
   <div>
-    <!-- ÅóÓÑÈ¦±³¾°±ÚÖ½ -->
+    <!-- æœ‹å‹åœˆèƒŒæ™¯å£çº¸ -->
     <el-row class="background" :style="{ backgroundImage: 'url(' + backgroundImage + ')' }">
       <el-col :span="24">
-        <!-- ÓÃ»§Í·Ïñ·ÅÓÚ±³¾°ÓÒÏÂ½Ç -->
+        <!-- ç”¨æˆ·å¤´åƒæ”¾äºèƒŒæ™¯å³ä¸‹è§’ -->
         <div class="user-info">
           <span class="user-nickname">{{ user.nickname }}</span>
-          <img class="user-avatar" :src="user.avatar" alt="ÓÃ»§Í·Ïñ">
+          <img class="user-avatar" :src="user.avatar" alt="ç”¨æˆ·å¤´åƒ">
         </div>
-        <!-- Ïà»úÍ¼±ê£¬µã»÷Ö´ĞĞº¯Êı -->
+        <!-- ç›¸æœºå›¾æ ‡ï¼Œç‚¹å‡»æ‰§è¡Œå‡½æ•° -->
         <div class="camera-icon" @click="handleCameraClick">
-          <img src="../assets/photo.png" alt="Ïà»úÍ¼±ê">
+          <img src="../assets/photo.png" alt="ç›¸æœºå›¾æ ‡">
         </div>
       </el-col>
     </el-row>
 
-    <!-- ±³¾°Í¼Æ¬ÈİÆ÷ -->
+    <!-- èƒŒæ™¯å›¾ç‰‡å®¹å™¨ -->
     <div class="background-image-container">
-      <!-- ÅóÓÑÈ¦·¢²¼ÄÚÈİ -->
+      <!-- æœ‹å‹åœˆå‘å¸ƒå†…å®¹ -->
       <el-row class="friend-circle" ref="friendCircle">
         <el-col :span="24" v-for="post in posts" :key="post.id">
           <el-card class="post">
             <div slot="header">
-              <img class="post-avatar" :src="post.author.avatar" alt="·¢²¼ÕßÍ·Ïñ">
-              <!-- ÔÚËµËµµÄÄÚÈİÏÂ·½ÏÔÊ¾·¢²¼ËµËµµÄÓÃ»§êÇ³Æ -->
+              <img class="post-avatar" :src="post.author.avatar" alt="å‘å¸ƒè€…å¤´åƒ">
+              <!-- åœ¨è¯´è¯´çš„å†…å®¹ä¸‹æ–¹æ˜¾ç¤ºå‘å¸ƒè¯´è¯´çš„ç”¨æˆ·æ˜µç§° -->
               <span class="post-nickname">{{ post.author.nickname }}</span>
             </div>
             <div class="post-content">
               <p>{{ post.content }}</p>
-              <img v-if="post.image" class="post-image" :src="post.image" alt="ËµËµÍ¼Æ¬">
+              <img v-if="post.image" class="post-image" :src="post.image" alt="è¯´è¯´å›¾ç‰‡">
             </div>
             <div class="post-footer">
-              <!-- ÏÔÊ¾·¢²¼Ê±¼ä -->
+              <!-- æ˜¾ç¤ºå‘å¸ƒæ—¶é—´ -->
               <span class="post-time">{{ formatTime(post.time) }}</span>
-              <!-- µãÔŞºÍÆÀÂÛ°´Å¥ -->
+              <!-- ç‚¹èµå’Œè¯„è®ºæŒ‰é’® -->
               <div class="post-actions">
                 <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }"
                    @click="toggleLike(post)"></i>
                 {{ post.likes.length }}
                 <el-button @click="showComments(post.id)" text>
-                  ÆÀÂÛ
+                  è¯„è®º
                 </el-button>
               </div>
             </div>
-            <!-- ÏÔÊ¾µãÔŞÈËÃûÁĞ±íºÍÆÀÂÛÁĞ±í -->
+            <!-- æ˜¾ç¤ºç‚¹èµäººååˆ—è¡¨å’Œè¯„è®ºåˆ—è¡¨ -->
             <div class="post-comments">
               <div v-if="post.likes.length > 0" class="post-likes">
-                µãÔŞ£º{{ post.likes.join(', ') }}
+                ç‚¹èµï¼š{{ post.likes.join(', ') }}
               </div>
               <div v-if="post.comments.length > 0" class="post-comments-list">
                 <div v-for="(comment, index) in post.comments" :key="index" class="post-comment">
-                  <span class="comment-author">{{ comment.author }}</span>£º
+                  <span class="comment-author">{{ comment.author }}</span>ï¼š
                   {{ comment.content }}
                 </div>
               </div>
             </div>
-            <!-- ÆÀÂÛÊäÈë¿ò -->
+            <!-- è¯„è®ºè¾“å…¥æ¡† -->
             <el-input
                 v-show="post.showCommentInput"
                 class="comment-input"
                 v-model="newComment"
-                placeholder="·¢±íÆÀÂÛ..."
+                placeholder="å‘è¡¨è¯„è®º..."
                 @keyup.enter="sendNewComment(newComment,post)"
             />
           </el-card>
@@ -73,32 +73,32 @@
 <script>
 import axios from 'axios';
 
-axios.defaults.baseURL = '/api'; // Ìæ»»³ÉÄãµÄºó¶ËAPIµØÖ·
+axios.defaults.baseURL = '/api'; // æ›¿æ¢æˆä½ çš„åç«¯APIåœ°å€
 
 export default {
   data() {
     return {
       user: {
         avatar: './src/assets/touxiang.jpg',
-        nickname: 'º®¹â'
+        nickname: 'å¯’å…‰'
       },
-      backgroundImage: '', // ±³¾°Í¼Æ¬µÄÂ·¾¶±äÁ¿
+      backgroundImage: '', // èƒŒæ™¯å›¾ç‰‡çš„è·¯å¾„å˜é‡
       posts: [],
-      showCommentInput: false,    //Ä¬ÈÏ²»ÏÔÊ¾ÊäÈë¿ò
-      newComment: ""       //ÆÀÂÛÄÚÈİ
+      showCommentInput: false,    //é»˜è®¤ä¸æ˜¾ç¤ºè¾“å…¥æ¡†
+      newComment: ""       //è¯„è®ºå†…å®¹
     };
   },
   created() {
-    // Òì²½ÇëÇó»ñÈ¡±³¾°Í¼Æ¬µØÖ·
+    // å¼‚æ­¥è¯·æ±‚è·å–èƒŒæ™¯å›¾ç‰‡åœ°å€
     this.loadBackgroundImage();
 
-    // Òì²½ÇëÇó»ñÈ¡ÅóÓÑÈ¦ËµËµÊı¾İ
+    // å¼‚æ­¥è¯·æ±‚è·å–æœ‹å‹åœˆè¯´è¯´æ•°æ®
     this.loadFriendCircleData();
   },
   methods: {
     async loadBackgroundImage() {
       try {
-        const userId = 1; //µÇÂ¼ÓÃ»§id
+        const userId = 1; //ç™»å½•ç”¨æˆ·id
         const response = await axios.get('/api/users/background-image/' + userId);
         console.log(response.data)
         this.backgroundImage = response.data;
@@ -108,36 +108,36 @@ export default {
     },
     async loadFriendCircleData() {
       try {
-        const response = await axios.get('/api/friendCircleData'); // Ìæ»»³ÉÊµ¼ÊµÄ API µØÖ·
+        const response = await axios.get('/api/friendCircleData'); // æ›¿æ¢æˆå®é™…çš„ API åœ°å€
         this.posts = response.data.posts;
       } catch (error) {
         console.error('Failed to load friend circle data:', error);
       }
     },
     isLiked(post) {
-      // ¼ì²éÓÃ»§ÊÇ·ñÒÑ¾­µãÔŞ¹ı¸ÃÌû×Ó
+      // æ£€æŸ¥ç”¨æˆ·æ˜¯å¦å·²ç»ç‚¹èµè¿‡è¯¥å¸–å­
       return post.likes.includes(this.user.nickname);
     },
     toggleLike(post) {
-      // ¼ì²éÓÃ»§ÊÇ·ñÒÑ¾­µãÔŞ¹ı¸ÃÌû×Ó
+      // æ£€æŸ¥ç”¨æˆ·æ˜¯å¦å·²ç»ç‚¹èµè¿‡è¯¥å¸–å­
       const index = post.likes.indexOf(this.user.nickname);
 
       if (index !== -1) {
-        // Èç¹ûÓÃ»§ÒÑ¾­µãÔŞ£¬½«ÆäÃû×Ö´ÓµãÔŞÈËÁĞ±íÖĞÒÆ³ı
+        // å¦‚æœç”¨æˆ·å·²ç»ç‚¹èµï¼Œå°†å…¶åå­—ä»ç‚¹èµäººåˆ—è¡¨ä¸­ç§»é™¤
         post.likes.splice(index, 1);
       } else {
-        // Èç¹ûÓÃ»§»¹Î´µãÔŞ£¬½«ÆäÃû×ÖÌí¼Óµ½µãÔŞÈËÁĞ±íÖĞ
+        // å¦‚æœç”¨æˆ·è¿˜æœªç‚¹èµï¼Œå°†å…¶åå­—æ·»åŠ åˆ°ç‚¹èµäººåˆ—è¡¨ä¸­
         post.likes.push(this.user.nickname);
       }
     },
     showComments(postId) {
-      // ÊµÏÖÏÔÊ¾ÆÀÂÛµÄÂß¼­
-      // ±éÀúËùÓĞÌû×Ó£¬ÉèÖÃ¶ÔÓ¦Ìû×ÓµÄ showCommentInput
+      // å®ç°æ˜¾ç¤ºè¯„è®ºçš„é€»è¾‘
+      // éå†æ‰€æœ‰å¸–å­ï¼Œè®¾ç½®å¯¹åº”å¸–å­çš„ showCommentInput
       this.posts.forEach(post => {
         post.showCommentInput = post.id === postId && !post.showCommentInput;
       });
 
-      // ¾Û½¹ÆÀÂÛÊäÈë¿ò
+      // èšç„¦è¯„è®ºè¾“å…¥æ¡†
       if (this.showCommentInput) {
         this.$nextTick(() => {
           const friendCircleRow = this.$refs.friendCircle;
@@ -147,28 +147,28 @@ export default {
           }
         });
       }
-      // ÉèÖÃ¶ÔÓ¦Ìû×ÓµÄ showCommentInput Îª true£¬ÆäËûÌû×ÓµÄÎª false
+      // è®¾ç½®å¯¹åº”å¸–å­çš„ showCommentInput ä¸º trueï¼Œå…¶ä»–å¸–å­çš„ä¸º false
       this.posts.forEach(post => {
         this.showCommentInput = post.id === postId;
       });
     },
     sendNewComment(newComment,post){
       this.$message.success(newComment)
-      // ±£´æÆÀÂÛµ½¶ÔÓ¦Ìû×ÓµÄ comments Êı×é
+      // ä¿å­˜è¯„è®ºåˆ°å¯¹åº”å¸–å­çš„ comments æ•°ç»„
       post.comments.push({
         author: this.user.nickname,
         content: this.newComment,
       });
-      // Òş²ØÆÀÂÛÊäÈë¿ò
+      // éšè—è¯„è®ºè¾“å…¥æ¡†
       post.showCommentInput = false;
-      // Çå¿ÕÆÀÂÛÄÚÈİ
+      // æ¸…ç©ºè¯„è®ºå†…å®¹
       this.newComment = '';
     },
     handleCameraClick() {
-      // ÔÚÕâÀïÖ´ĞĞµã»÷Ïà»úÍ¼±êÊ±µÄ²Ù×÷
-      this.$message.success("·¢²¼ÅèÓÑÈ¦")
+      // åœ¨è¿™é‡Œæ‰§è¡Œç‚¹å‡»ç›¸æœºå›¾æ ‡æ—¶çš„æ“ä½œ
+      this.$message.success("å‘å¸ƒç›†å‹åœˆ")
       console.log('Camera icon clicked!');
-      // ¿ÉÒÔÌí¼ÓÌø×ªÂß¼­»òÆäËû²Ù×÷
+      // å¯ä»¥æ·»åŠ è·³è½¬é€»è¾‘æˆ–å…¶ä»–æ“ä½œ
     },
     formatTime(time) {
       const options = {
@@ -205,8 +205,8 @@ export default {
   top: -80px;
   right: -80px;
   cursor: pointer;
-  /* µ÷ÕûÏà»úÍ¼±ê´óĞ¡£¬¿ÉÒÔ¸ù¾İĞèÒªÉèÖÃ¿í¸ß */
-  /* »òÕßÊ¹ÓÃ transform ËõĞ¡Í¼±ê */
+  /* è°ƒæ•´ç›¸æœºå›¾æ ‡å¤§å°ï¼Œå¯ä»¥æ ¹æ®éœ€è¦è®¾ç½®å®½é«˜ */
+  /* æˆ–è€…ä½¿ç”¨ transform ç¼©å°å›¾æ ‡ */
   transform: scale(0.15);
 }
 
@@ -214,7 +214,7 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 2px solid #fff; /* Ìí¼Ó±ß¿ò */
+  border: 2px solid #fff; /* æ·»åŠ è¾¹æ¡† */
 }
 
 .user-nickname {
@@ -224,11 +224,11 @@ export default {
 
 .background-image-container {
   background-size: cover;
-  background-position: center; /* »òÕßµ÷ÕûÎªÄãÏ£ÍûµÄÎ»ÖÃ */
+  background-position: center; /* æˆ–è€…è°ƒæ•´ä¸ºä½ å¸Œæœ›çš„ä½ç½® */
   background-repeat: no-repeat;
-  background-color: #fff; /* ±³¾°É«£¬·ÀÖ¹±³¾°Í¼Æ¬²»ÍêÕûÊ±ÏÔÊ¾ÎªºÚÉ« */
-  width: 100%; /* ±³¾°Í¼Æ¬ÈİÆ÷¿í¶ÈÎª100% */
-  height: 100vh; /* ±³¾°Í¼Æ¬ÈİÆ÷¸ß¶ÈÎª100%ÊÓ¿Ú¸ß¶È */
+  background-color: #fff; /* èƒŒæ™¯è‰²ï¼Œé˜²æ­¢èƒŒæ™¯å›¾ç‰‡ä¸å®Œæ•´æ—¶æ˜¾ç¤ºä¸ºé»‘è‰² */
+  width: 100%; /* èƒŒæ™¯å›¾ç‰‡å®¹å™¨å®½åº¦ä¸º100% */
+  height: 100vh; /* èƒŒæ™¯å›¾ç‰‡å®¹å™¨é«˜åº¦ä¸º100%è§†å£é«˜åº¦ */
 }
 
 .friend-circle {
@@ -291,16 +291,16 @@ export default {
 .comment-input {
   margin-top: 10px;
   width: 100%;
-  border: 1px solid #ccc; /* Ìí¼Ó±ß¿ò */
-  padding: 5px; /* µ÷ÕûÄÚ±ß¾à */
-  border-radius: 5px; /* Ìí¼ÓÔ²½Ç */
+  border: 1px solid #ccc; /* æ·»åŠ è¾¹æ¡† */
+  padding: 5px; /* è°ƒæ•´å†…è¾¹è· */
+  border-radius: 5px; /* æ·»åŠ åœ†è§’ */
 }
 
 .post-actions {
   margin-top: 10px;
 }
 
-/* Font Awesome Í¼±êÑùÊ½ */
+/* Font Awesome å›¾æ ‡æ ·å¼ */
 .fa-heart {
   color: red;
 }

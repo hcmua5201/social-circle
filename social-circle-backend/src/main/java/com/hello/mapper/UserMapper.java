@@ -17,7 +17,7 @@ public interface UserMapper {
     @Select("select * from user where email=#{email} and password=#{password}")
     User loginByEmailAndPwd(@Param("email") String email,@Param("password") String password);
 
-    @Insert("INSERT INTO User (nickname, avatar,backgroundImagePath,username,password,email) VALUES (#{nickname}, #{avatar},null,#{username},#{password},#{email})")
+    @Insert("INSERT INTO User (nickname, avatar,backgroundImagePath,username,password,email) VALUES (#{nickname}, #{avatar},#{backgroundImagePath},#{username},#{password},#{email})")
     void insert(User user);
 
     @Select("SELECT * FROM User WHERE userID = #{userID}")
