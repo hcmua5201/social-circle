@@ -58,19 +58,19 @@ public class UserController {
     public Result addUser(@RequestBody User user) {
         System.out.println("新增数据："+user);
         userService.addUser(user);
-        return new Result(200, "用户添加成功", null);
+        return new Result(222, "用户添加成功", null);
     }
 
     @GetMapping("/{userID}")
     public Result getUserByID(@PathVariable Long userID) {
         User user = userService.getUserByID(userID);
-        return new Result(200, "用户获取成功", user);
+        return new Result(444, "用户获取成功", user);
     }
 
     @GetMapping("/all")
     public Result getAllUsers() {
         List<User> users = userService.getAllUsers();
-        return new Result(200, "用户获取成功", users);
+        return new Result(222, "用户获取成功", users);
     }
 
     // 根据业务需求添加其他接口

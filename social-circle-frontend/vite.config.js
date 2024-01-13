@@ -16,7 +16,15 @@ export default defineConfig({
         changeOrigin: true,                    //ÊÇ·ñ¿çÓò
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-
+      '/sms': {
+        target: 'https://sm.ms/',
+        changeOrigin: true,
+        secure: false,
+        headers: {
+          Referer: 'https://sm.ms/'
+        },
+        rewrite: (path) => path.replace(/^\/sms/, ''),
+      },
     },
   }
 })

@@ -11,11 +11,18 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "User")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +34,7 @@ public class User {
 
     private String nickname;
 
+    private String avatar;
     // 新添加的字段
     private String backgroundImagePath;
 

@@ -16,9 +16,9 @@
       <el-form-item label="头像" prop="avatar">
         <el-upload
             class="avatar-uploader"
-            action="http://localhost:8083/api/upload/image"
-            :show-file-list="true"
-            :on-success="handleAvatarSuccess"
+            action=""
+            :http-request="upload"
+            :show-file-list="false"
             :before-upload="beforeAvatarUpload"
         >
           <el-button type="primary">点击上传头像</el-button>
@@ -43,13 +43,18 @@
 
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="register">提交注册</el-button>
+        <el-button type="primary" style="width: 100%;" @click="register">提交注册</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="warning" style="width: 100%;" @click="tologin">返回登录</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -66,12 +71,27 @@ export default {
     };
   },
   methods: {
-    handleAvatarSuccess(response, file) {
-      console.log(response)
-      // 上传头像成功后的回调
-      // 在实际项目中，你需要从后端接口返回的数据中获取头像的保存路径
-      this.registerForm.avatar = response.obj; // 假设后端返回的数据中包含头像的url
-    },
+    upload(file) {
+      const formData = new FormData()
+      formData.append('smfile', file.file)
+      axios.defaults.baseURL='/sms'
+      axios.post('/api/v2/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': 'a1GaFmvrVYXdCzFM4AG5In2rjkwaAvFQ'
+        }
+      }).then((res)=>{
+        console.log(res.data)
+        if (res.data.success === true){
+          this.$message.success("上传成功")
+          this.registerForm.avatar=res.data.data.url
+        }else {
+          this.$message.info("头像已存在，但不影响使用，")
+          this.registerForm.avatar=res.data.images
+        }
+
+      })
+    },  //文件上传
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -84,36 +104,83 @@ export default {
       }
 
       return isJPG && isLt2M;
-    },
+    }, //处理文件上传大小
     getVerificationCode() {
       // 获取验证码的逻辑，这里是模拟的
       if (this.registerForm.email.includes('@qq.com')) {
          this.fullEmail = this.registerForm.email ;
         // 发送axios请求，携带参数fullEmail
         // 模拟成功后，你可以将后端返回的验证码保存到前端，然后进行倒计时等操作
-        alert(this.fullEmail )
-        alert('验证码已发送');
+        axios.defaults.baseURL='/api'
+        axios({
+          method:'get',
+          url:"/email/sendEmail/" + this.fullEmail,
+        }).then((response)=>{
+          console.log(response.data)
+          if (response.data.code===222){
+            this.$message.success(response.data.msg)
+          }else {
+            this.$message.error(response.data.msg)
+          }
+        })
       } else {
         this.fullEmail = this.registerForm.email + '@qq.com';
-        this.$message.error('请输入有效的邮箱');
+        axios.defaults.baseURL='/api'
+        axios({
+          method:'get',
+          url:"/email/sendEmail/" + this.fullEmail,
+        }).then((response)=>{
+          console.log(response.data)
+          if (response.data.code===222){
+            this.$message.success(response.data.msg)
+          }else {
+            this.$message.error(response.data.msg)
+          }
+        })
       }
-    },
+    }, //获取验证码
     register() {
       // 注册按钮的逻辑，这里是模拟的
-      if (!this.validateForm()) {
-        return;
-      }
+      if (this.validateForm()) {
+        if (this.registerForm.email.includes('@qq.com')) {
+          this.fullEmail = this.registerForm.email;
+        }else {
+          this.fullEmail = this.registerForm.email + '@qq.com';
+        }
+        this.registerForm.email = this.fullEmail
+        // 先移除againpassword，然后封装数据
+        const registerData = Object.assign({}, this.registerForm);
+        delete registerData.againpassword;
+        //先判断验证码正确不
+        axios({
+          method:'post',
+          url:'/email/QueryVerificationCode',
+          data:{
+            "email":registerData.email,"math":registerData.verificationCode
+          }
+        }).then((response)=>{
+          console.log(response.data)
+          if (response.data.code===444){
+            this.$message.error(response.data.msg)
+          }else {
+            //验证码正确，注册,删除验证码的键
+            delete registerData.verificationCode;
+            axios({
+              method:'post',
+              url:'/api/users/add',
+              data:registerData
+            }).then((response)=>{
+              console.log(response.data)
+              if (response.data.code===222){
+                this.$message.success(response.data.msg)
+              }else {
+                this.$message.success(response.data.msg)
+              }
+            })
+          }
+        })
 
-      // 发送axios请求，携带注册表单数据
-      // 在实际项目中，你需要根据后端接口的要求来配置axios请求
-      // import axios from 'axios';
-      // axios.post('/your-register-api', this.registerForm)
-      //   .then(response => {
-      //     // 处理注册成功的逻辑
-      //   })
-      //   .catch(error => {
-      //     // 处理注册失败的逻辑
-      //   });
+      }
     },
     validateForm() {
       // 校验表单数据，返回true表示验证通过，false表示验证失败
@@ -133,15 +200,14 @@ export default {
         this.$message.error('两次输入的密码不一致');
         return false;
       }
-      if (!this.registerForm.email || !this.registerForm.email.includes('@qq.com')) {
-        this.$message.error('请输入有效的QQ邮箱');
-        return false;
-      }
       if (!this.registerForm.verificationCode) {
         this.$message.error('请输入验证码');
         return false;
       }
       return true;
+    },
+    tologin(){
+      this.$router.push('/');
     }
   }
 };

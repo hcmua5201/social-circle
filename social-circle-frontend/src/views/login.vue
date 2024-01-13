@@ -43,6 +43,7 @@ export default {
       if (lowerCaseInput.includes('@qq.com')) {
         // 邮箱登录
         requestData = { email: this.loginForm.usernameOrEmail, password: this.loginForm.password };
+
         axios({
           method:'post',
           url:'/api/users/loginByEmailAndPwd',

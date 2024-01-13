@@ -9,6 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
+
+
+//使用图床则此控制器无效
 @Controller
 @RequestMapping("/api/upload")
 @CrossOrigin
