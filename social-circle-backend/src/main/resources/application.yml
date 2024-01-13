@@ -7,6 +7,8 @@ mybatis:
 
 
 spring:
+  main:
+    lazy-initialization: true
   datasource:
       url: "jdbc:mysql://47.115.216.196:3306/circlefriends?useSSL=false&characterEncoding=UTF-8"
       username: "root"

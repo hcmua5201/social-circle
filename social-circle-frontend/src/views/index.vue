@@ -196,6 +196,7 @@ export default {
       this.$message.success("发布盆友圈")
       console.log('Camera icon clicked!');
       // 可以添加跳转逻辑或其他操作
+      this.$router.push('/publish');
     },
     formatTime(time) {
       const options = {
@@ -216,6 +217,7 @@ export default {
 </script>
 
 <style scoped>
+
 .background {
   position: relative;
   padding: 150px;
