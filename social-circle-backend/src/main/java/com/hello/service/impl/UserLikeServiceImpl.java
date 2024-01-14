@@ -12,15 +12,19 @@ public class UserLikeServiceImpl implements UserLikeService {
     @Autowired
     private UserLikeMapper userLikeMapper;
 
+
+
     @Override
-    public void addUserLike(UserLike userLike) {
-        userLikeMapper.insert(userLike);
+    public void insert(Long userID, Long postID) {
+        userLikeMapper.insert(userID, postID);
     }
 
     @Override
-    public void removeUserLike(UserLike userLike) {
-        userLikeMapper.delete(userLike);
+    public void delete(Long userID, Long postID) {
+        userLikeMapper.delete(userID, postID);
     }
+
+
 
     @Override
     public UserLike getUserLike(UserLike userLike) {

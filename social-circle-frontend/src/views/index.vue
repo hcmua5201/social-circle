@@ -36,16 +36,18 @@
               <!-- 点赞和评论按钮 -->
               <div class="post-actions">
                 <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }" @click="toggleLike(post)"></i>
-                {{ post.likes ? post.likes.length : 0 }} <!-- Add null check for post.likes -->
-                <el-button @click="showComments(post.id)" text>评论</el-button>
+<!--                {{ post.likeCount }}-->
+                <el-button @click="showComments(post.postID)" text>评论</el-button>
               </div>
             </div>
             <!-- 显示点赞人名列表和评论列表 -->
             <div class="post-comments">
-              <div v-if="post.likes && post.likes.length > 0" class="post-likes">点赞：{{ post.likes.join(', ') }}</div>
+              <div v-if="post.likeUsernames && post.likeUsernames.length > 0" class="post-likes">
+                点赞：{{ post.likeUsernames.join(', ') }}
+              </div>
               <div v-if="post.comments && post.comments.length > 0" class="post-comments-list">
                 <div v-for="(comment, index) in post.comments" :key="index" class="post-comment">
-                  <span class="comment-author">{{ comment.author }}</span>：{{ comment.content }}
+                  <span class="comment-author">{{ post.commenters[index] }}</span>：{{ comment }}
                 </div>
               </div>
             </div>
@@ -80,16 +82,19 @@ export default {
   created() {
     this.loadUserInfoAndBackgroundImage();
     // 发送请求获取朋友圈数据
-    axios.get('/api/posts/all')  // 替换成实际的后端接口地址
-        .then(response => {
-          console.log(response.data.obj)
-          this.posts = response.data.obj;
-        })
-        .catch(error => {
-          console.error('Error fetching posts:', error);
-        });
+  this.getAll();
   },
   methods: {
+    getAll(){
+      axios.get('/api/posts/all')  // 替换成实际的后端接口地址
+          .then(response => {
+            console.log(response.data.obj)
+            this.posts = response.data.obj;
+          })
+          .catch(error => {
+            console.error('Error fetching posts:', error);
+          });
+    },
     loadUserInfoAndBackgroundImage() {
       const logininfo = localStorage.getItem("login_info");
       const useriD = sessionStorage.getItem("userID");
@@ -100,16 +105,53 @@ export default {
       this.user.nickname = login_info.nickname;
     },
     isLiked(post) {
-      return post.likes && post.likes.some(like => like.nickname === this.user.nickname);
+      return post.likeUsernames && post.likeUsernames.includes(this.user.nickname);
     },
     toggleLike(post) {
-      const index = post.likes.findIndex(like => like.nickname === this.user.nickname);
+      const logininfo = localStorage.getItem("login_info");
+      const useriD = sessionStorage.getItem("userID");
+      const login_info = JSON.parse(logininfo);
+      const userID = JSON.parse(useriD);
 
-      if (index !== -1) {
-        post.likes.splice(index, 1);
+      // 判断当前用户是否已经点赞
+      const hasLiked = post.likeUserIds.includes(userID);
+      let requestData = {};
+
+      if (hasLiked) {
+        // 如果已经点赞，发送请求取消点赞
+        requestData = { userID: userID, postID: post.postID };
+        axios({
+          method: 'post',
+          url: '/api/likes/remove',
+          params: requestData  // 修正此行，应该使用 params
+        }).then(response => {
+          // 处理成功的逻辑，可能需要更新点赞列表等
+          if (response.data.code===222){
+            this.getAll()
+            this.$message.success(response.data.msg)
+          }
+          post.likeUserIds = post.likeUserIds.filter(id => id !== userID);
+          // 可能需要更新其他相关数据，具体根据后端返回的数据结构来处理
+        }).catch(error => {
+          console.error('Error unliking post:', error);
+        });
       } else {
-        post.likes.push({
-          nickname: this.user.nickname
+        // 如果未点赞，发送请求添加点赞
+        requestData = { userID: userID, postID: post.postID };
+        axios({
+          method: 'post',
+          url: '/api/likes/addLike',
+          params: requestData  // 修正此行，应该使用 data
+        }).then(response => {
+          // 处理成功的逻辑，可能需要更新点赞列表等
+          if (response.data.code===222){
+            this.getAll()
+            this.$message.success(response.data.msg)
+          }
+          post.likeUserIds.push(userID);
+          // 可能需要更新其他相关数据，具体根据后端返回的数据结构来处理
+        }).catch(error => {
+          console.error('Error liking post:', error);
         });
       }
     },

@@ -1,12 +1,13 @@
 package com.hello.service;
 
 import com.hello.entry.UserLike;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserLikeService {
 
-    void addUserLike(UserLike userLike);
+    void insert(@Param("userID") Long userID,@Param("postID") Long postID);
 
-    void removeUserLike(UserLike userLike);
+    void delete(@Param("userID") Long userID, @Param("postID") Long postID);
 
     UserLike getUserLike(UserLike userLike);
 

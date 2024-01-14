@@ -16,16 +16,22 @@ public class UserLikeController {
     @Autowired
     private UserLikeService userLikeService;
 
-    @PostMapping("/add")
-    public Result addUserLike(@RequestBody UserLike userLike) {
-        userLikeService.addUserLike(userLike);
-        return new Result(200, "点赞成功", null);
+
+    @PostMapping("/remove")
+    public Result removeUserLike(@RequestParam Long userID, @RequestParam Long postID) {
+        System.out.println(userID);
+        System.out.println(postID);
+        userLikeService.delete(userID, postID);
+        return new Result(222,"取消点赞成功",null);
     }
 
-    @DeleteMapping("/remove")
-    public Result removeUserLike(@RequestBody UserLike userLike) {
-        userLikeService.removeUserLike(userLike);
-        return new Result(200, "取消点赞成功", null);
+    @PostMapping("/addLike")
+    public Result addLike(@RequestParam Long userID, @RequestParam Long postID) {
+        System.out.println("添加点赞");
+        System.out.println(userID);
+        System.out.println(postID);
+        userLikeService.insert(userID, postID);
+        return new Result(222,"点赞成功",null);
     }
 
     @GetMapping("/{postID}/{userID}")
