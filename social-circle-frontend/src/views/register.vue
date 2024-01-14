@@ -172,6 +172,8 @@ export default {
               console.log(response.data)
               if (response.data.code===222){
                 this.$message.success(response.data.msg)
+                //注册成功后应跳转进入首页
+                this.tologin();
               }else {
                 this.$message.error(response.data.msg)
               }
