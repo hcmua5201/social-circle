@@ -30,6 +30,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User checkByUsername(String username) {
+        return userMapper.checkByUsername(username);
+    }
+
+    @Override
+    public User checkByNickname(String nickname) {
+        return userMapper.checkByNickname(nickname);
+    }
+
+    @Override
+    public User checkByEmail(String email) {
+        return userMapper.checkByEmail(email);
+    }
+
+    @Override
     public void addUser(User user) {
         userMapper.insert(user);
     }

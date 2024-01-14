@@ -11,6 +11,12 @@ public interface UserService {
 
     User loginByEmailAndPwd(@Param("email") String email,@Param("password") String password);
     String getBackgroundImagePathById(Long userId);
+
+    User checkByUsername(@Param("username") String username);
+
+    User checkByNickname(@Param("nickname") String nickname);
+
+    User checkByEmail(@Param("email") String email);
     void addUser(User user);
 
     User getUserByID(Long userID);

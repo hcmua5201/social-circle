@@ -174,7 +174,7 @@ export default {
               if (response.data.code===222){
                 this.$message.success(response.data.msg)
               }else {
-                this.$message.success(response.data.msg)
+                this.$message.error(response.data.msg)
               }
             })
           }

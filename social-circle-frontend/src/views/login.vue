@@ -52,6 +52,8 @@ export default {
           console.log(response.data.code)
           if (response.data.code===222){
             this.$message.success(response.data.msg)
+            localStorage.setItem("login_info",JSON.stringify(response.data.obj))
+            sessionStorage.setItem("userID",JSON.stringify(response.data.obj.userId))
             this.$router.push('/index');
           }else {
             this.$message.error(response.data.msg)
@@ -68,6 +70,8 @@ export default {
           console.log(response.data.code)
           if (response.data.code===222){
             this.$message.success(response.data.msg)
+            localStorage.setItem("login_info",JSON.stringify(response.data.obj))
+            sessionStorage.setItem("userID",JSON.stringify(response.data.obj.userId))
             this.$router.push('/index');
           }else {
             this.$message.error(response.data.msg)

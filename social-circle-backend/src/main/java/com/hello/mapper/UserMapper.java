@@ -17,6 +17,14 @@ public interface UserMapper {
     @Select("select * from user where email=#{email} and password=#{password}")
     User loginByEmailAndPwd(@Param("email") String email,@Param("password") String password);
 
+    @Select("select * from user where username=#{username}")
+    User checkByUsername(@Param("username") String username);
+
+    @Select("select * from user where nickname=#{nickname}")
+    User checkByNickname(@Param("nickname") String nickname);
+
+    @Select("select * from user where email=#{email}")
+    User checkByEmail(@Param("email") String email);
     @Insert("INSERT INTO User (nickname, avatar,backgroundImagePath,username,password,email) VALUES (#{nickname}, #{avatar},#{backgroundImagePath},#{username},#{password},#{email})")
     void insert(User user);
 
