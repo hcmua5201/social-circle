@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <!-- 朋友圈背景壁纸 -->
     <el-row class="background" :style="{ backgroundImage: 'url(' + user.backgroundImage + ')' }">
       <el-col :span="24">
@@ -57,6 +57,7 @@
         </el-col>
       </el-row>
     </div>
+    <div id="goTop" @click="goTop"> ⬆ </div>
   </div>
 </template>
 
@@ -85,6 +86,9 @@ export default {
   this.getAll();
   },
   methods: {
+    goTop(){
+      window.scrollTo(0,0);
+    },
     getAll(){
       axios.get('/api/posts/all')  // 替换成实际的后端接口地址
           .then(response => {
@@ -217,7 +221,25 @@ export default {
 </script>
 
 <style scoped>
-
+.container{
+  max-width: 450px;
+  margin: 0 auto;
+}
+#goTop{
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #fff;
+  background: deepskyblue;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 16px;
+  z-index: 1000;
+}
 .background {
   position: relative;
   padding: 150px;
