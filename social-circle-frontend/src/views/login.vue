@@ -1,11 +1,11 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" label-width="0">
+    <el-form ref="loginForm"  :model="loginForm" label-width="0">
       <el-form-item>
-        <el-input v-model="loginForm.usernameOrEmail" placeholder="用户名/邮箱"></el-input>
+        <el-input v-model="loginForm.usernameOrEmail" placeholder="用户名/邮箱" @keydown.enter="login"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input type="password" v-model="loginForm.password" placeholder="密码"></el-input>
+        <el-input type="password" v-model="loginForm.password" placeholder="密码" @keydown.enter="login"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="login" style="width: 100%;">登录</el-button>
@@ -90,6 +90,7 @@ export default {
 
 <style scoped>
 .login-container {
+
   width: 100%;
   height: 100vh;
   display: flex;

@@ -2,16 +2,16 @@
   <div class="register-container">
     <el-form ref="registerForm" :model="registerForm" label-width="80px">
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="registerForm.username" placeholder="不超过10位"></el-input>
+        <el-input v-model="registerForm.username" placeholder="不超过10位" @keydown.enter="register"></el-input>
       </el-form-item>
       <el-form-item label="昵称" prop="nickname">
-        <el-input v-model="registerForm.nickname" placeholder="不超过15位"></el-input>
+        <el-input v-model="registerForm.nickname" placeholder="不超过15位" @keydown.enter="register"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="registerForm.password" placeholder="不少于5位" show-password></el-input>
+        <el-input type="password" v-model="registerForm.password" placeholder="不少于5位" show-password @keydown.enter="register"></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="againpassword">
-        <el-input type="password" v-model="registerForm.againpassword" placeholder="再次确认密码" show-password></el-input>
+        <el-input type="password" v-model="registerForm.againpassword" placeholder="再次确认密码" show-password @keydown.enter="register"></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
         <el-upload
@@ -31,7 +31,7 @@
         ></el-image>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="registerForm.email" placeholder="请输入邮箱前缀">
+        <el-input v-model="registerForm.email" placeholder="请输入邮箱前缀" @keydown.enter="register">
           <template v-slot:append>
             <span>@qq.com</span>
           </template>
@@ -39,8 +39,7 @@
       </el-form-item>
       <el-form-item label="验证码" prop="verificationCode">
         <el-button @click="getVerificationCode">获取验证码</el-button>
-        <el-input v-model="registerForm.verificationCode" placeholder="请输入验证码"></el-input>
-
+        <el-input v-model="registerForm.verificationCode" placeholder="请输入验证码" @keydown.enter="register"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="width: 100%;" @click="register">提交注册</el-button>
