@@ -10,7 +10,7 @@
         </div>
         <!-- 相机图标，点击执行函数 -->
         <div class="camera-icon" @click="handleCameraClick">
-          <img src="../assets/photo.png" alt="相机图标">
+          <img src="../assets/photo.png" alt="相机de图标">
         </div>
       </el-col>
     </el-row>
