@@ -7,10 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/posts")
 @CrossOrigin
@@ -34,7 +30,8 @@ public class PostController {
     @GetMapping("/all")
     public Result getAllPosts() {
         List<Post> posts = postService.getAllPosts();
-        return new Result(200, "动态获取成功", posts);
+        System.out.println(posts);
+        return new Result(222, "动态获取成功", posts);
     }
 
     // 根据业务需求添加其他接口

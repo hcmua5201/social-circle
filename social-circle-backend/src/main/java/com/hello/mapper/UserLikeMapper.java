@@ -1,5 +1,6 @@
 package com.hello.mapper;
 
+import com.hello.entry.User;
 import com.hello.entry.UserLike;
 import org.apache.ibatis.annotations.*;
 import java.util.List;
@@ -16,6 +17,10 @@ public interface UserLikeMapper {
     @Select("SELECT * FROM UserLike WHERE postID = #{post.postID} AND userID = #{user.userID}")
     UserLike findByID(UserLike userLike);
 
+    @Select("SELECT u.* FROM userlike l " +
+            "INNER JOIN user u ON l.userID = u.userID " +
+            "WHERE l.postID = #{postID}")
+    List<User> getLikeUsersByPostId(Long postID);
     // 其他需要的方法根据业务需求添加
 }
 

@@ -4,21 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postID;
 
-    @ManyToOne
-    @JoinColumn(name = "userID")
     private User author;
 
     private String content;
@@ -27,5 +22,16 @@ public class Post {
 
     private Date time;
 
+    private int likeCount;
+
+    private List<User> likeUsers; // Add likeUsers property
+
+    private List<Comment> comments; // Add comments property
+    private List<String> commenters;
+
+    // 添加 commenters 的 setter 方法
+    public void setCommenters(List<String> commenters) {
+        this.commenters = commenters;
+    }
     // 其他字段根据需要添加
 }

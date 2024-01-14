@@ -26,7 +26,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getAllPosts() {
-        return postMapper.findAll();
+        return postMapper.getAllPosts();
     }
 
     // 其他需要的方法根据业务需求添加

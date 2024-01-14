@@ -1,13 +1,12 @@
 <template>
   <div>
     <!-- 朋友圈背景壁纸 -->
-    <el-row class="background" :style="{ backgroundImage: 'url(' + backgroundImage + ')' }">
+    <el-row class="background" :style="{ backgroundImage: 'url(' + user.backgroundImage + ')' }">
       <el-col :span="24">
         <!-- 用户头像放于背景右下角 -->
         <div class="user-info">
           <span class="user-nickname">{{ user.nickname }}</span>
           <img class="user-avatar" :src="user.avatar" alt="用户头像">
-
         </div>
         <!-- 相机图标，点击执行函数 -->
         <div class="camera-icon" @click="handleCameraClick">
@@ -20,7 +19,7 @@
     <div class="background-image-container">
       <!-- 朋友圈发布内容 -->
       <el-row class="friend-circle" ref="friendCircle">
-        <el-col :span="24" v-for="post in posts" :key="post.id">
+        <el-col :span="24" v-for="post in posts" :key="post.postID">
           <el-card class="post">
             <div slot="header">
               <img class="post-avatar" :src="post.author.avatar" alt="发布者头像">
@@ -29,41 +28,29 @@
             </div>
             <div class="post-content">
               <p>{{ post.content }}</p>
-              <img v-if="post.image" class="post-image" ref="img" :src="post.image" @click="toggleFullscreen" alt="说说图片">
+              <img v-if="post.image" class="post-image" :src="post.image" @click="toggleFullscreen" alt="说说图片">
             </div>
             <div class="post-footer">
               <!-- 显示发布时间 -->
               <span class="post-time">{{ formatTime(post.time) }}</span>
               <!-- 点赞和评论按钮 -->
               <div class="post-actions">
-                <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }"
-                   @click="toggleLike(post)"></i>
-                {{ post.likes.length }}
-                <el-button @click="showComments(post.id)" text>
-                  评论
-                </el-button>
+                <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }" @click="toggleLike(post)"></i>
+                {{ post.likes ? post.likes.length : 0 }} <!-- Add null check for post.likes -->
+                <el-button @click="showComments(post.id)" text>评论</el-button>
               </div>
             </div>
             <!-- 显示点赞人名列表和评论列表 -->
             <div class="post-comments">
-              <div v-if="post.likes.length > 0" class="post-likes">
-                点赞：{{ post.likes.join(', ') }}
-              </div>
-              <div v-if="post.comments.length > 0" class="post-comments-list">
+              <div v-if="post.likes && post.likes.length > 0" class="post-likes">点赞：{{ post.likes.join(', ') }}</div>
+              <div v-if="post.comments && post.comments.length > 0" class="post-comments-list">
                 <div v-for="(comment, index) in post.comments" :key="index" class="post-comment">
-                  <span class="comment-author">{{ comment.author }}</span>：
-                  {{ comment.content }}
+                  <span class="comment-author">{{ comment.author }}</span>：{{ comment.content }}
                 </div>
               </div>
             </div>
             <!-- 评论输入框 -->
-            <el-input
-                v-show="post.showCommentInput"
-                class="comment-input"
-                v-model="newComment"
-                placeholder="发表评论..."
-                @keyup.enter="sendNewComment(newComment,post)"
-            />
+            <el-input v-show="post.showCommentInput" class="comment-input" v-model="newComment" placeholder="发表评论..." @keyup.enter="sendNewComment(newComment, post)" />
           </el-card>
         </el-col>
       </el-row>
@@ -71,103 +58,66 @@
   </div>
 </template>
 
-
 <script>
 import axios from 'axios';
-axios.defaults.baseURL='/api'
+
+axios.defaults.baseURL = '/api';
+
 export default {
   data() {
     return {
       user: {
         avatar: '',
-        nickname: ''
+        nickname: '',
+        backgroundImage: '',
       },
-      backgroundImage: '', // 背景图片的路径变量
       posts: [],
-      showCommentInput: false,    //默认不显示输入框
-      newComment: "",       //评论内容
+      showCommentInput: false,
+      newComment: "",
       isFullscreen: false,
     };
   },
   created() {
-    // 模拟从数据库获取背景图片地址
-    // 实际中使用异步请求从服务器获取
     this.loadUserInfoAndBackgroundImage();
-
-    // 模拟异步请求获取朋友圈说说数据
-    // 实际中可以替换成从后端获取数据的逻辑
-    setTimeout(() => {
-      this.posts = [
-        {
-          id: 1,
-          author: {
-            avatar: './src/assets/touxiang.jpg',
-            nickname: '寒光'
-          },
-          content: '这是一条朋友圈说说',
-          image: '../src/assets/好吃的1.jpg',
-          liked: false,
-          comments: [],
-          likes: ['小明', '小红'],
-          time: new Date('2024-01-10T12:30:00')
-        },
-        {
-          id: 2,
-          author: {
-            avatar: './src/assets/vue.svg',
-            nickname: 'Vue'
-          },
-          content: '今天天气甚是不错，风儿在耳边喧嚣，云儿在天空飘荡。',
-          image: '../src/assets/宇宙.png',
-          liked: false,
-          comments: [
-            {author: '小花', content: '好好吃啊！'},
-            {author: '小刚', content: '一起去吃吧！'}
-          ],
-          likes: ['小刚'],
-          time: new Date()
-        },
-        // 可以添加更多的说说数据
-      ];
-    }, 1000); // 模拟异步请求的延时
+    // 发送请求获取朋友圈数据
+    axios.get('/api/posts/all')  // 替换成实际的后端接口地址
+        .then(response => {
+          console.log(response.data.obj)
+          this.posts = response.data.obj;
+        })
+        .catch(error => {
+          console.error('Error fetching posts:', error);
+        });
   },
   methods: {
-    //加载登录用户信息(头像，壁纸，昵称)
-     loadUserInfoAndBackgroundImage() {
-        const logininfo = localStorage.getItem("login_info");
-        const useriD = sessionStorage.getItem("userID");
-        // 转JSON
-        const login_info = JSON.parse(logininfo);
-        const userID = JSON.parse(useriD);
-        console.log(login_info)
-        this.backgroundImage = login_info.backgroundImagePath;
-        this.user.avatar = login_info.avatar
-        this.user.nickname = login_info.nickname
+    loadUserInfoAndBackgroundImage() {
+      const logininfo = localStorage.getItem("login_info");
+      const useriD = sessionStorage.getItem("userID");
+      const login_info = JSON.parse(logininfo);
+      const userID = JSON.parse(useriD);
+      this.user.backgroundImage = login_info.backgroundImagePath;
+      this.user.avatar = login_info.avatar;
+      this.user.nickname = login_info.nickname;
     },
     isLiked(post) {
-      // 检查用户是否已经点赞过该帖子
-      return post.likes.includes(this.user.nickname);
+      return post.likes && post.likes.some(like => like.nickname === this.user.nickname);
     },
     toggleLike(post) {
-      // 检查用户是否已经点赞过该帖子
-      const index = post.likes.indexOf(this.user.nickname);
+      const index = post.likes.findIndex(like => like.nickname === this.user.nickname);
 
       if (index !== -1) {
-        // 如果用户已经点赞，将其名字从点赞人列表中移除
         post.likes.splice(index, 1);
       } else {
-        // 如果用户还未点赞，将其名字添加到点赞人列表中
-        post.likes.push(this.user.nickname);
+        post.likes.push({
+          nickname: this.user.nickname
+        });
       }
     },
     showComments(postId) {
-      // 实现显示评论的逻辑
-      // 遍历所有帖子，设置对应帖子的 showCommentInput
       this.posts.forEach(post => {
-        post.showCommentInput = post.id === postId && !post.showCommentInput;
+        post.showCommentInput = post.postID === postId && !post.showCommentInput;
       });
 
-      // 聚焦评论输入框
       if (this.showCommentInput) {
         this.$nextTick(() => {
           const friendCircleRow = this.$refs.friendCircle;
@@ -177,26 +127,31 @@ export default {
           }
         });
       }
-      // 设置对应帖子的 showCommentInput 为 true，其他帖子的为 false
       this.posts.forEach(post => {
-        this.showCommentInput = post.id === postId;
+        this.showCommentInput = post.postID === postId;
       });
     },
-    sendNewComment(newComment,post){
-      this.$message.success(newComment)
-      // 保存评论到对应帖子的 comments 数组
-      post.comments.push({
-        author: this.user.nickname,
-        content: this.newComment,
-      });
-      // 隐藏评论输入框
+    sendNewComment(newComment, post) {
+      this.$message.success(newComment);
+
+      axios.post('/your-comment-api-endpoint', {
+        postId: post.postID,
+        userId: this.user.userId,
+        content: newComment
+      })
+          .then(response => {
+            // Assuming your API returns the updated post data after adding a comment
+            post.comments = response.data.comments;
+          })
+          .catch(error => {
+            console.error('Error adding comment:', error);
+          });
+
       post.showCommentInput = false;
-      // 清空评论内容
       this.newComment = '';
     },
     handleCameraClick() {
-      // 在这里执行点击相机图标时的操作
-      this.$message.success("发布盆友圈")
+      this.$message.success("发布朋友圈");
       console.log('Camera icon clicked!');
       // 可以添加跳转逻辑或其他操作
       this.$router.push('/publish');
@@ -210,10 +165,10 @@ export default {
         minute: '2-digit',
         second: '2-digit'
       };
-      return new Intl.DateTimeFormat('zh-CN', options).format(time);
+      return new Intl.DateTimeFormat('zh-CN', options).format(new Date(time));
     },
     toggleFullscreen(event) {
-      this.$message.error("图片查看功能-未完成")
+      this.$message.error("图片查看功能-未完成");
     },
   }
 };
