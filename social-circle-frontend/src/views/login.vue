@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <h1>登录</h1>
+    <h1>WelCome Login</h1>
     <el-form ref="loginForm"  :model="loginForm" label-width="0">
       <el-form-item>
         <el-input v-model="loginForm.usernameOrEmail" placeholder="用户名/邮箱" @keydown.enter="login"></el-input>
@@ -12,7 +12,7 @@
         <el-button type="primary" @click="login" style="width: 100%;">登录</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button @click="goToRegister" plain style="width: 100%;">注aaa册</el-button>
+        <el-button @click="goToRegister" plain style="width: 100%;">注册</el-button>
       </el-form-item>
     </el-form>
   </div>
