@@ -12,7 +12,7 @@
         <el-button type="primary" @click="login" style="width: 100%;">登录</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button @click="goToRegister" plain style="width: 100%;">注册</el-button>
+        <el-button @click="goToRegister" plain style="width: 100%;">注aaa册</el-button>
       </el-form-item>
     </el-form>
   </div>
