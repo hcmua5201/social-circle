@@ -49,7 +49,7 @@ export default {
           url:'/api/users/loginByEmailAndPwd',
           params:{email:requestData.email,password:requestData.password}
         }).then((response)=>{
-          console.log(response.data.code)
+          // console.log(response.data.code)
           if (response.data.code===222){
             this.$message.success(response.data.msg)
             localStorage.setItem("login_info",JSON.stringify(response.data.obj))
@@ -67,7 +67,7 @@ export default {
           url:'/api/users/loginByUserAndPwd',
           params:{username:requestData.username,password:requestData.password}
         }).then((response)=>{
-          console.log(response.data.code)
+          // console.log(response.data.code)
           if (response.data.code===222){
             this.$message.success(response.data.msg)
             localStorage.setItem("login_info",JSON.stringify(response.data.obj))

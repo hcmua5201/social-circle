@@ -79,8 +79,8 @@ export default {
   data() {
     return {
       user: {
-        avatar: './src/assets/touxiang.jpg',
-        nickname: '寒光'
+        avatar: '',
+        nickname: ''
       },
       backgroundImage: '', // 背景图片的路径变量
       posts: [],
@@ -92,7 +92,7 @@ export default {
   created() {
     // 模拟从数据库获取背景图片地址
     // 实际中使用异步请求从服务器获取
-    this.loadBackgroundImage();
+    this.loadUserInfoAndBackgroundImage();
 
     // 模拟异步请求获取朋友圈说说数据
     // 实际中可以替换成从后端获取数据的逻辑
@@ -132,14 +132,17 @@ export default {
     }, 1000); // 模拟异步请求的延时
   },
   methods: {
-    async loadBackgroundImage() {
-      try {
-        // 模拟异步请求获取背景图片路径
-        // const response = await axios.get('path/to/database-background-image'); // 替换成实际的 API 地址
-        this.backgroundImage = './src/assets/宇宙.png';
-      } catch (error) {
-        console.error('Failed to load background image:', error);
-      }
+    //加载登录用户信息(头像，壁纸，昵称)
+     loadUserInfoAndBackgroundImage() {
+        const logininfo = localStorage.getItem("login_info");
+        const useriD = sessionStorage.getItem("userID");
+        // 转JSON
+        const login_info = JSON.parse(logininfo);
+        const userID = JSON.parse(useriD);
+        console.log(login_info)
+        this.backgroundImage = login_info.backgroundImagePath;
+        this.user.avatar = login_info.avatar
+        this.user.nickname = login_info.nickname
     },
     isLiked(post) {
       // 检查用户是否已经点赞过该帖子
