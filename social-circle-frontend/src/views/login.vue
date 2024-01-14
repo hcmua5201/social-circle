@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <h1>登录</h1>
     <el-form ref="loginForm"  :model="loginForm" label-width="0">
       <el-form-item>
         <el-input v-model="loginForm.usernameOrEmail" placeholder="用户名/邮箱" @keydown.enter="login"></el-input>
