@@ -94,8 +94,13 @@ export default {
     // 实际中使用异步请求从服务器获取
     this.loadUserInfoAndBackgroundImage();
 
+    //测试获取动态
+    // -------------后端返回数据和前端不匹配，待修复
+    // this.getAllPosts();
+
     // 模拟异步请求获取朋友圈说说数据
     // 实际中可以替换成从后端获取数据的逻辑
+
     setTimeout(() => {
       this.posts = [
         {
@@ -130,8 +135,17 @@ export default {
         // 可以添加更多的说说数据
       ];
     }, 1000); // 模拟异步请求的延时
+
   },
   methods: {
+    //获取所有动态
+    getAllPosts(){
+      console.log("进入获取动态方法...")
+      axios.get("/api/posts/all").then(res =>{
+        console.log(res.data.obj)
+        this.posts = res.data.obj;
+      })
+    },
     //加载登录用户信息(头像，壁纸，昵称)
      loadUserInfoAndBackgroundImage() {
         const logininfo = localStorage.getItem("login_info");
