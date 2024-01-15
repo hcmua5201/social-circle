@@ -2,12 +2,13 @@ package com.hello.service;
 
 import com.hello.entry.Comment;
 import com.hello.entry.Post;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface CommentService {
 
-    void addComment(Comment comment);
+    int insert(@Param("postID") Long postID, @Param("userID") Long userID, @Param("content") String content);
 
     Comment getCommentByID(Long commentID);
 

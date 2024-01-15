@@ -22,9 +22,13 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/add")
-    public Result addComment(@RequestBody Comment comment) {
-        commentService.addComment(comment);
-        return new Result(200, "评论成功", null);
+    public Result addComment( @RequestParam Long postID,@RequestParam Long userID,@RequestParam String content) {
+        System.out.println("添加评论信息："+"用户id"+userID+"帖子id:"+postID+"评论内容："+content);
+        int insert = commentService.insert(postID,userID, content);
+        if (insert == 1){
+            return new Result(222, "评论成功", insert);
+        }
+        return new Result(444, "评论失败", insert);
     }
 
     @GetMapping("/{commentID}")

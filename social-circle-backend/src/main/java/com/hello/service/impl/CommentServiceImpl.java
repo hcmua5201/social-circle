@@ -15,9 +15,10 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
+
     @Override
-    public void addComment(Comment comment) {
-        commentMapper.insert(comment);
+    public int insert(Long postID, Long userID, String content) {
+       return commentMapper.insert(postID, userID, content);
     }
 
     @Override

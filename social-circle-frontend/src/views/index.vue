@@ -60,6 +60,9 @@
               </div>
               <!-- 评论输入框 -->
               <el-input v-show="post.showCommentInput" class="comment-input" v-model="newComment" placeholder="发表评论..." @keyup.enter="sendNewComment(newComment, post)" />
+              <!-- 提交评论按钮 -->
+              <el-button v-show="post.showCommentInput" class="comment-submit" @click="sendNewComment(newComment, post)" type="success">提交</el-button>
+
             </el-card>
           </el-col>
         </el-row>
@@ -166,7 +169,7 @@ export default {
           console.error('Error liking post:', error);
         });
       }
-    },
+    },  //点赞功能
     showComments(postId) {
       this.posts.forEach(post => {
         post.showCommentInput = post.postID === postId && !post.showCommentInput;
@@ -184,26 +187,40 @@ export default {
       this.posts.forEach(post => {
         this.showCommentInput = post.postID === postId;
       });
-    },
+    }, //点击评论按钮触发评论输入框显示
     sendNewComment(newComment, post) {
-      this.$message.success(newComment);
+      const useriD = sessionStorage.getItem("userID");
+      const userID = JSON.parse(useriD);
+      // this.$message.success("消息"+newComment+"用户"+userID+"帖子"+post.postID);
+      let requestData = {};
 
-      axios.post('/your-comment-api-endpoint', {
-        postId: post.postID,
-        userId: this.user.userId,
-        content: newComment
-      })
-          .then(response => {
-            // Assuming your API returns the updated post data after adding a comment
-            post.comments = response.data.comments;
-          })
-          .catch(error => {
-            console.error('Error adding comment:', error);
-          });
+      if (newComment.length>=50){
+          this.$message.warning("评论内容不能超过50字")
+      }else
+      if (newComment ===''){
+         this.$message.error("评论内容不能为空")
+      }else
+      if (newComment !== ''){
+          // this.$message.warning("评论内容通过")
+        requestData = { userID: userID, postID: post.postID,content:newComment };
 
-      post.showCommentInput = false;
-      this.newComment = '';
-    },
+        axios({
+          method:'post',
+          url:'/api/comments/add',
+          params:requestData
+        }).then((response)=>{
+          console.log(response.data)
+          if (response.data.code===222){
+            this.getAll();
+            this.$message.success(response.data.msg)
+          }else {
+            this.$message.error(response.data.msg)
+          }
+        })
+        post.showCommentInput = false;
+        this.newComment = '';
+      }
+    },   //评论功能
     handleCameraClick() {
       this.$message.success("发布朋友圈");
       console.log('Camera icon clicked!');
@@ -405,11 +422,18 @@ img.post-avatar:hover{
 
 .comment-input {
   margin-top: 10px;
-  width: 100%;
-  border: 1px solid #ccc; /* 添加边框 */
-  border-radius: 5px; /* 添加圆角 */
+  width: calc(100% - 80px); /* 调整输入框宽度，留出按钮的宽度 */
+  border-radius: 5px;
   outline: none;
+  float: left; /* 将输入框浮动到左边 */
 }
+
+.comment-submit {
+  margin-top: 10px;
+  margin-left: 10px;
+  float: left; /* 将按钮浮动到左边 */
+}
+
 
 .post-actions {
   margin-top: 10px;

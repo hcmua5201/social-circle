@@ -8,9 +8,9 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Insert("INSERT INTO Comment (postID, userID, content) VALUES (#{post.postID}, #{user.userID}, #{content})")
-    @Options(useGeneratedKeys = true, keyProperty = "commentID")
-    void insert(Comment comment);
+    @Insert("INSERT INTO Comment (postID, userID, content) VALUES (#{postID}, #{userID}, #{content})")
+
+    int insert(@Param("postID") Long postID,@Param("userID") Long userID,@Param("content") String content);
 
     @Select("SELECT * FROM Comment WHERE commentID = #{commentID}")
     Comment findByID(Long commentID);
