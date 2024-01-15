@@ -54,7 +54,12 @@
                 </div>
                 <div v-if="post.comments && post.comments.length > 0" class="post-comments-list">
                   <div v-for="(comment, index) in post.comments" :key="index" class="post-comment">
-                    <span class="comment-author">{{ post.commenters[index] }}</span>：{{ comment }}
+                    <span class="comment-author">{{ post.commenters[index] }}</span>：<span @click="showMore(index,comment)">{{ comment }}</span>
+                    <div class="moreMenu" v-show="index === this.selectedCommentId">
+                      <p @click="copyComment(comment)">复制</p>
+                      <p>删除</p>
+                      <p>回复</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -89,6 +94,8 @@ export default {
       showCommentInput: false,
       newComment: "",
       isFullscreen: false,
+      moreMenuStatus: false,
+      selectedCommentId:-1,
     };
   },
   created() {
@@ -101,8 +108,18 @@ export default {
    this.upDateComment();
   },
   methods: {
+    showMore(index,comment){
+      this.$message.info("点击评论："+comment)
+      this.selectedCommentId=index;
+      console.log(comment)
+    },
     goTop(){
       window.scrollTo(0,0);
+    },
+    copyComment(comment){
+      this.$message.success("已复制评论: "+comment)
+      navigator.clipboard.writeText(comment);
+      this.selectedCommentId = -1;
     },
     getAll(){
       axios.get('/api/posts/all')  // 替换成实际的后端接口地址
@@ -282,6 +299,27 @@ export default {
 .container{
   max-width: 450px;
   margin: 0 auto;
+  min-height: 80%;
+}
+
+.moreMenu{
+  display: block;
+  width: 60px;
+  height: 64px;
+  position: absolute;
+  background-color: #f3f3f5;
+  right: 30px;
+  border-radius: 5px;
+  /* 设置投影的颜色 */
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
+}
+.moreMenu p{
+  font-size: 16px;
+  line-height: 20px;
+  margin: 0 auto;
+  color: #000;
+  text-align: center;
+  border: 1px solid #fff;
 }
 
 div.top{

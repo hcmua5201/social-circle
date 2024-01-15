@@ -60,6 +60,9 @@ export default {
 }
 .container{
   background-color: #fff;
+  max-width: 450px;
+  margin: 0 auto;
+  min-height: 90vh;
 }
 
 .container .top{
