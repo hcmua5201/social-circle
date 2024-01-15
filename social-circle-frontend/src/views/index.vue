@@ -95,6 +95,10 @@ export default {
     this.loadUserInfoAndBackgroundImage();
     // 发送请求获取朋友圈数据
   this.getAll();
+  //多执行几次，保证页面数据显示正确
+   this.upDateComment();
+   this.upDateComment();
+   this.upDateComment();
   },
   methods: {
     goTop(){
@@ -109,6 +113,26 @@ export default {
           .catch(error => {
             console.error('Error fetching posts:', error);
           });
+    },
+    async upDateComment(){
+      axios({
+        method:'get',
+        url:'/api/comments/UpdateComment'
+      }).then((response)=>{
+        console.log(response.data)
+        this.updateCommentsData(response.data.obj);
+      })
+    },
+    async updateCommentsData(newCommentsData) {
+      // 遍历帖子列表
+      this.posts.forEach(post => {
+        // 找到当前帖子的评论数据
+        const commentsForPost = newCommentsData.filter(comment => comment.postID === post.postID);
+
+        // 更新帖子的评论数据
+        post.comments = commentsForPost.map(comment => comment.content);
+        post.commenters = commentsForPost.map(comment => comment.nickname);
+      });
     },
     loadUserInfoAndBackgroundImage() {
       const logininfo = localStorage.getItem("login_info");
@@ -143,6 +167,9 @@ export default {
           // 处理成功的逻辑，可能需要更新点赞列表等
           if (response.data.code===222){
             this.getAll()
+            this.upDateComment();
+            this.upDateComment();
+            this.upDateComment();
             this.$message.success(response.data.msg)
           }
           post.likeUserIds = post.likeUserIds.filter(id => id !== userID);
@@ -161,6 +188,9 @@ export default {
           // 处理成功的逻辑，可能需要更新点赞列表等
           if (response.data.code===222){
             this.getAll()
+            this.upDateComment();
+            this.upDateComment();
+            this.upDateComment();
             this.$message.success(response.data.msg)
           }
           post.likeUserIds.push(userID);
@@ -212,6 +242,9 @@ export default {
           console.log(response.data)
           if (response.data.code===222){
             this.getAll();
+            this.upDateComment();
+            this.upDateComment();
+            this.upDateComment();
             this.$message.success(response.data.msg)
           }else {
             this.$message.error(response.data.msg)

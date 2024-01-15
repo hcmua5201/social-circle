@@ -2,6 +2,7 @@ package com.hello.controller;
 
 import com.hello.entry.Comment;
 import com.hello.entry.Post;
+import com.hello.entry.vo.UpdateComment;
 import com.hello.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,14 @@ public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+
+    @GetMapping("/UpdateComment")
+    public Result UpdateComment(){
+        List<UpdateComment> updateComments = commentService.queryAll();
+        System.out.println(updateComments);
+        return new Result(222,"查询成功",updateComments);
+    }
 
     @PostMapping("/add")
     public Result addComment( @RequestParam Long postID,@RequestParam Long userID,@RequestParam String content) {

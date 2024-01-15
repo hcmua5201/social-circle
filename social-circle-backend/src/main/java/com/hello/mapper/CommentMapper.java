@@ -2,6 +2,7 @@ package com.hello.mapper;
 
 import com.hello.entry.Comment;
 import com.hello.entry.Post;
+import com.hello.entry.vo.UpdateComment;
 import org.apache.ibatis.annotations.*;
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface CommentMapper {
     @Select("SELECT * FROM Comment WHERE postID = #{post.postID}")
     List<Comment> findByPostID(Post post);
 
+    @Select("SELECT * FROM comment c, user u, post p WHERE c.userID = u.userID AND c.postID = p.postID ORDER BY c.commentID")
+    List<UpdateComment> queryAll();
     // 其他需要的方法根据业务需求添加
 }

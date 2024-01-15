@@ -2,6 +2,7 @@ package com.hello.service.impl;
 
 import com.hello.entry.Comment;
 import com.hello.entry.Post;
+import com.hello.entry.vo.UpdateComment;
 import com.hello.mapper.CommentMapper;
 import com.hello.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getCommentsByPostID(Post post) {
         return commentMapper.findByPostID(post);
+    }
+
+    @Override
+    public List<UpdateComment> queryAll() {
+        return commentMapper.queryAll();
     }
 
     // 其他需要的方法根据业务需求添加
