@@ -1,61 +1,69 @@
 <template>
   <div class="container">
     <!-- 朋友圈背景壁纸 -->
-    <el-row class="background" :style="{ backgroundImage: 'url(' + user.backgroundImage + ')' }">
-      <el-col :span="24">
-        <!-- 用户头像放于背景右下角 -->
-        <div class="user-info">
-          <span class="user-nickname">{{ user.nickname }}</span>
-          <img class="user-avatar" :src="user.avatar" alt="用户头像">
-        </div>
-        <!-- 相机图标，点击执行函数 -->
-        <div class="camera-icon" @click="handleCameraClick">
-          <img src="../assets/photo.png" alt="相机de图标">
-        </div>
-      </el-col>
-    </el-row>
-
-    <!-- 背景图片容器 -->
-    <div class="background-image-container">
-      <!-- 朋友圈发布内容 -->
-      <el-row class="friend-circle" ref="friendCircle">
-        <el-col :span="24" v-for="post in posts" :key="post.postID">
-          <el-card class="post">
-            <div slot="header">
-              <img class="post-avatar" :src="post.author.avatar" alt="发布者头像">
-              <!-- 在说说的内容下方显示发布说说的用户昵称 -->
-              <span class="post-nickname">{{ post.author.nickname }}</span>
-            </div>
-            <div class="post-content">
-              <p>{{ post.content }}</p>
-              <img v-if="post.image" class="post-image" :src="post.image" @click="toggleFullscreen" alt="说说图片">
-            </div>
-            <div class="post-footer">
-              <!-- 显示发布时间 -->
-              <span class="post-time">{{ formatTime(post.time) }}</span>
-              <!-- 点赞和评论按钮 -->
-              <div class="post-actions">
-                <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }" @click="toggleLike(post)"></i>
-<!--                {{ post.likeCount }}-->
-                <el-button @click="showComments(post.postID)" text>评论</el-button>
-              </div>
-            </div>
-            <!-- 显示点赞人名列表和评论列表 -->
-            <div class="post-comments">
-              <div v-if="post.likeUsernames && post.likeUsernames.length > 0" class="post-likes">
-                点赞：{{ post.likeUsernames.join(', ') }}
-              </div>
-              <div v-if="post.comments && post.comments.length > 0" class="post-comments-list">
-                <div v-for="(comment, index) in post.comments" :key="index" class="post-comment">
-                  <span class="comment-author">{{ post.commenters[index] }}</span>：{{ comment }}
-                </div>
-              </div>
-            </div>
-            <!-- 评论输入框 -->
-            <el-input v-show="post.showCommentInput" class="comment-input" v-model="newComment" placeholder="发表评论..." @keyup.enter="sendNewComment(newComment, post)" />
-          </el-card>
+    <div class="top">
+      <el-row class="background" :style="{ backgroundImage: 'url(' + user.backgroundImage + ')' }">
+        <el-col :span="24">
+          <!-- 用户头像放于背景右下角 -->
+          <div class="user-info">
+            <span class="user-nickname">{{ user.nickname }}</span>
+            <img class="user-avatar" :src="user.avatar" alt="用户头像">
+          </div>
+          <!-- 相机图标，点击执行函数 -->
+          <div class="camera-icon" @click="handleCameraClick">
+            <img src="../assets/photo.png" alt="相机de图标">
+          </div>
         </el-col>
       </el-row>
+    </div>
+
+    <!-- 动态容器 -->
+    <div class="bottom">
+      <div class="background-image-container">
+        <!-- 朋友圈发布内容 -->
+        <el-row class="friend-circle" ref="friendCircle">
+          <el-col :span="24" v-for="post in posts" :key="post.postID">
+            <el-card class="post">
+              <div slot="header">
+                <img class="post-avatar" :src="post.author.avatar" alt="发布者头像">
+                <!-- 在说说的内容下方显示发布说说的用户昵称 -->
+                <span class="post-nickname">{{ post.author.nickname }}</span>
+              </div>
+              <div class="post-content">
+                <p>{{ post.content }}</p>
+                <img v-if="post.image" class="post-image" :src="post.image" @click="toggleFullscreen" alt="说说图片">
+              </div>
+              <div class="post-footer">
+                <div class="left">
+                  <!-- 显示发布时间 -->
+                  <span class="post-time">{{ formatTime(post.time) }}</span><br>
+                  <span class="post-address">陕西·西安</span>
+                </div>
+                <div class="right">
+                  <!-- 点赞和评论按钮 -->
+                  <div class="post-actions">
+                    <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }" @click="toggleLike(post)"></i>
+                    <el-button @click="showComments(post.postID)" text>评论</el-button>
+                  </div>
+                </div>
+              </div>
+              <!-- 显示点赞人名列表和评论列表 -->
+              <div class="post-comments">
+                <div v-if="post.likeUsernames && post.likeUsernames.length > 0" class="post-likes">
+                  点赞：{{ post.likeUsernames.join(', ') }}
+                </div>
+                <div v-if="post.comments && post.comments.length > 0" class="post-comments-list">
+                  <div v-for="(comment, index) in post.comments" :key="index" class="post-comment">
+                    <span class="comment-author">{{ post.commenters[index] }}</span>：{{ comment }}
+                  </div>
+                </div>
+              </div>
+              <!-- 评论输入框 -->
+              <el-input v-show="post.showCommentInput" class="comment-input" v-model="newComment" placeholder="发表评论..." @keyup.enter="sendNewComment(newComment, post)" />
+            </el-card>
+          </el-col>
+        </el-row>
+      </div>
     </div>
     <div id="goTop" @click="goTop"> ⬆ </div>
   </div>
@@ -225,6 +233,10 @@ export default {
   max-width: 450px;
   margin: 0 auto;
 }
+
+div.top{
+  height: 332px;
+}
 #goTop{
   position: fixed;
   bottom: 10px;
@@ -241,9 +253,10 @@ export default {
   z-index: 1000;
 }
 .background {
-  position: relative;
   padding: 150px;
   background-size: cover;
+  display: block;
+  height: 100%;
 }
 
 .user-info {
@@ -265,9 +278,9 @@ export default {
 }
 
 .user-avatar {
-  width: 70px;
-  height: 70px;
-  margin-right: 10px;
+  width: 60px;
+  height: 60px;
+  margin-right: 52px;
   margin-top: 16px;
   border: 3px solid #fff; /* 添加边框 */
 }
@@ -343,12 +356,21 @@ img.post-avatar:hover{
 }
 
 .post-footer {
-  display: flex;
   justify-content: space-between;
   align-items: center;
 }
+.post-footer .left,.post-footer .right{
+  width: 50%;
+  float: left;
+}
 
-.post-time {
+.post-time{
+  color: #959595;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: bold;
+}
+.post-address{
   color: #959595;
   font-size: 12px;
   line-height: 20px;
@@ -356,7 +378,7 @@ img.post-avatar:hover{
 }
 
 .post-comments {
-  margin-top: 10px;
+  margin-top: 70px;
   background-color: #f3f3f5;
 }
 
@@ -372,23 +394,27 @@ img.post-avatar:hover{
 
 .post-comment {
   margin-top: 5px;
-  color: #555;
+  color: #090909;
+  border-top: 1px solid #e5e5e5;
 }
 
 .comment-author {
   font-weight: bold;
+  color: #546993;
 }
 
 .comment-input {
   margin-top: 10px;
   width: 100%;
   border: 1px solid #ccc; /* 添加边框 */
-  padding: 5px; /* 调整内边距 */
   border-radius: 5px; /* 添加圆角 */
+  outline: none;
 }
 
 .post-actions {
   margin-top: 10px;
+  width: 80px;
+  margin-left: 120px;
 }
 
 /* Font Awesome 图标样式 */
