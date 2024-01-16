@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data(){
 
@@ -37,6 +39,13 @@ export default {
       this.$router.push('/index')
     },
     publish(){
+      axios.get("https://api.vvhan.com/api/getIpInfo").then(res =>{
+        console.log(res.data.info)
+        console.log(res.data.info.country)
+        console.log(res.data.info.prov)
+        console.log(res.data.info.city)
+        this.$message.success("发布于："+res.data.info.country+" "+res.data.info.prov+"省 "+res.data.info.city+" ")
+      })
       this.$message.success("发布成功")
       this.$router.push('/index')
     }

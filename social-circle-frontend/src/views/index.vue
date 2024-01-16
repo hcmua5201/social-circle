@@ -36,8 +36,8 @@
               <div class="post-footer">
                 <div class="left">
                   <!-- 显示发布时间 -->
-                  <span class="post-time">{{ formatTime(post.time) }}</span><br>
-                  <span class="post-address">陕西·西安</span>
+                  <span class="post-time">🕑： {{ formatTime(post.time) }}</span><br>
+                  <span class="post-address">🏙️： 陕西·西安</span>
                 </div>
                 <div class="right">
                   <!-- 点赞和评论按钮 -->
@@ -79,6 +79,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 axios.defaults.baseURL = '/api';
 
@@ -272,21 +273,23 @@ export default {
       }
     },   //评论功能
     handleCameraClick() {
-      this.$message.success("发布朋友圈");
+      // this.$message.success("发布朋友圈");
       console.log('Camera icon clicked!');
       // 可以添加跳转逻辑或其他操作
       this.$router.push('/publish');
     },
     formatTime(time) {
-      const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
-      return new Intl.DateTimeFormat('zh-CN', options).format(new Date(time));
+      // const options = {
+      //   year: 'numeric',
+      //   month: '2-digit',
+      //   day: '2-digit',
+      //   hour: '2-digit',
+      //   minute: '2-digit',
+      //   second: '2-digit',
+      //   hour12: false, // 指定 24 小时制
+      // };
+      // return new Intl.DateTimeFormat('zh-CN', options).format(new Date(time));
+      return moment(time).format('YYYY-MM-DD HH:mm:ss');
     },
     toggleFullscreen(event) {
       this.$message.error("图片查看功能-未完成");
