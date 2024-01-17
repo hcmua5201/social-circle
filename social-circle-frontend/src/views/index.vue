@@ -367,9 +367,9 @@ export default {
 .sidebar {
   position: fixed;
   top: 0;
-  opacity: 0.95;
+  opacity: 0.95;  /* 我加了毛玻璃透明 */
   left: 0;
-  height: 100%;
+  height: 50%;   /* 调整菜单高度度，根据需要调整，100%为全屏 */
   width: auto; /* 调整菜单宽度，根据需要调整 */
   background-color: #545c64;
   text-align: center;
