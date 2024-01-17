@@ -23,6 +23,8 @@ public class Post {
 
     private Date time;
 
+    private String address;
+
     private int likeCount;
 
     private List<User> likeUsers;

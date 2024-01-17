@@ -39,14 +39,29 @@ export default {
       this.$router.push('/index')
     },
     publish(){
-      axios.get("https://api.vvhan.com/api/getIpInfo").then(res =>{
-        console.log(res.data.info)
-        console.log(res.data.info.country)
-        console.log(res.data.info.prov)
-        console.log(res.data.info.city)
-        this.$message.success("发布于："+res.data.info.country+" "+res.data.info.prov+"省 "+res.data.info.city+" ")
+
+      //此处api搁置，由于不精确，经常抽风返回错误地址
+      // axios.get("https://api.vvhan.com/api/getIpInfo").then(res =>{
+      //   console.log(res.data.info)
+      //   console.log(res.data.info.country)
+      //   console.log(res.data.info.prov)
+      //   console.log(res.data.info.city)
+      //   this.$message.success("发布于："+res.data.info.country+" "+res.data.info.prov+"省 "+res.data.info.city+" ")
+      // })
+
+      // 接入IP138额度查询API,更稳定，但是付费，省着点调😭
+      axios({
+        url:'http://api.ipshudi.com/ip/',
+        method:'get',
+        params:{
+          token:'c065a105a93db1662ed6d2842a1ac1f3'
+        }
+      }).then(res =>{
+        console.log(res.data.data)
+        const address = res.data.data
+        this.$message.success("发布于："+address[0]+" "+address[1]+"省 "+address[2])
       })
-      this.$message.success("发布成功")
+      // this.$message.success("发布成功")
       this.$router.push('/index')
     }
   },
