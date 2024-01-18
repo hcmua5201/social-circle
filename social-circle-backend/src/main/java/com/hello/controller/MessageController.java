@@ -43,7 +43,7 @@ public class MessageController {
         // 构建一个邮件对象
         Boolean mail = messageService.sendMail(RandomMath, getPeople);
         if (mail) {
-            //设置有效时间,这里是30秒，
+            //设置有效时间,这里是5分钟，
             redisTemplate.opsForValue().set(getPeople, RandomMath, 300, TimeUnit.SECONDS);
             return new Result(222,"验证码发送成功，5分钟之后失效", RandomMath);
         }

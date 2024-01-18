@@ -26,10 +26,10 @@ public class MessageServiceimpl implements MessageService {
         // 设置邮件接收者
         message.setTo(getPeople);
         // 设置邮件的主题
-        message.setSubject("登录验证码");
+        message.setSubject("注册验证码");
 
         // 设置邮件的正文内容
-        String text = "您的验证码为：" + code + ",60秒后失效,请勿泄露给他人。";
+        String text = "您的验证码为：" + code + ",5分钟后失效,请勿泄露给他人。";
         message.setText(text);
         // 发送邮件
         try {
