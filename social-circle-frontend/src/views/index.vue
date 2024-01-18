@@ -1,54 +1,56 @@
 <template>
   <div class="container">
-
-    <div v-if="sidebarVisible" class="sidebar" @click="toggleSidebar">
-      <el-col :span="24">
-        <div class="pengyou-cebianlan-touxiang">
-          <img :src="user.avatar">
-        </div>
-        <p>欢迎你： {{user.nickname}}</p>
-        <el-menu
-            default-active="2"
-            class="el-menu-vertical-demo"
-            background-color="#090723"
-            text-color="#fff"
-            active-text-color="#ffd04b"
-        >
-          <el-menu-item index="1" >
-            <template #title>
-              <el-icon><location /></el-icon>
-              <span>首页</span>
-            </template>
-          </el-menu-item>
-          <el-menu-item index="3" >
-            <el-icon><document /></el-icon>
-            <span>修改资料</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <el-icon><setting /></el-icon>
-            <span>退出登录</span>
-          </el-menu-item>
-        </el-menu>
-      </el-col>
-    </div>
-
     <!-- 朋友圈背景壁纸 -->
     <div class="top">
-
+      <!-- 侧边栏触发按钮 -->
+      <div class="sidebar-trigger" @click="toggleSidebar">
+        <el-icon><medal /></el-icon>
+      </div>
+      <!-- 侧边菜单栏 -->
+      <el-drawer v-model="sidebarVisible" size="200px" direction="ltr" class="sidebar-drawer">
+        <el-col :span="24">
+          <el-menu
+              default-active="2"
+              class="el-menu-vertical-demo"
+              background-color="#545c64"
+              text-color="#fff"
+              active-text-color="#ffd04b"
+          >
+            <el-sub-menu index="1">
+              <template #title>
+                <el-icon><location /></el-icon>
+                <span>Navigator One</span>
+              </template>
+              <el-menu-item-group title="Group One">
+                <el-menu-item index="1-1">item one</el-menu-item>
+                <el-menu-item index="1-2">item two</el-menu-item>
+              </el-menu-item-group>
+              <el-menu-item-group title="Group Two">
+                <el-menu-item index="1-3">item three</el-menu-item>
+              </el-menu-item-group>
+              <el-sub-menu index="1-4">
+                <template #title>item four</template>
+                <el-menu-item index="1-4-1">item one</el-menu-item>
+              </el-sub-menu>
+            </el-sub-menu>
+            <el-menu-item index="3" disabled>
+              <el-icon><document /></el-icon>
+              <span>Navigator Three</span>
+            </el-menu-item>
+            <el-menu-item index="4">
+              <el-icon><setting /></el-icon>
+              <span>Navigator Four</span>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
+      </el-drawer>
       <el-row class="background" :style="{ backgroundImage: 'url(' + user.backgroundImage + ')' }">
-
         <el-col :span="24">
           <!-- 用户头像放于背景右下角 -->
           <div class="user-info">
             <span class="user-nickname">{{ user.nickname }}</span>
             <img class="user-avatar" :src="user.avatar" alt="用户头像">
           </div>
-
-          <!-- 侧边栏触发按钮 -->
-          <div class="sidebar-trigger" @click="toggleSidebar">
-            <el-icon><medal /></el-icon>
-          </div>
-
           <!-- 相机图标，点击执行函数 -->
           <div class="camera-icon" @click="handleCameraClick">
             <img src="../assets/photo.png" alt="相机de图标">
@@ -155,7 +157,6 @@ export default {
     toggleSidebar() {
       this.sidebarVisible = !this.sidebarVisible;
     },
-
     showMore(index,comment){
       this.$message.info("点击评论："+comment)
       this.selectedCommentId=index;
@@ -178,7 +179,7 @@ export default {
           .catch(error => {
             console.error('Error fetching posts:', error);
           });
-    }, //获取所有帖子数据，要配合 this.upDateComment();使用
+    },
     async upDateComment(){
       axios({
         method:'get',
@@ -187,7 +188,7 @@ export default {
         console.log(response.data)
         this.updateCommentsData(response.data.obj);
       })
-    }, //获取评论区数据
+    },
     async updateCommentsData(newCommentsData) {
       // 遍历帖子列表
       this.posts.forEach(post => {
@@ -198,7 +199,7 @@ export default {
         post.comments = commentsForPost.map(comment => comment.content);
         post.commenters = commentsForPost.map(comment => comment.nickname);
       });
-    }, //更新评论区数据，由upDateComment调用
+    },
     loadUserInfoAndBackgroundImage() {
       const logininfo = localStorage.getItem("login_info");
       const useriD = sessionStorage.getItem("userID");
@@ -207,10 +208,10 @@ export default {
       this.user.backgroundImage = login_info.backgroundImagePath;
       this.user.avatar = login_info.avatar;
       this.user.nickname = login_info.nickname;
-    }, //获取用户头像，背景壁纸，昵称数据
+    },
     isLiked(post) {
       return post.likeUsernames && post.likeUsernames.includes(this.user.nickname);
-    }, //判断当前用户是否点赞
+    },
     toggleLike(post) {
       const logininfo = localStorage.getItem("login_info");
       const useriD = sessionStorage.getItem("userID");
@@ -265,7 +266,7 @@ export default {
         });
       }
     },  //点赞功能
-    showComments(postId) { //显示对应评论输入框
+    showComments(postId) {
       this.posts.forEach(post => {
         post.showCommentInput = post.postID === postId && !post.showCommentInput;
       });
@@ -283,7 +284,7 @@ export default {
         this.showCommentInput = post.postID === postId;
       });
     }, //点击评论按钮触发评论输入框显示
-    sendNewComment(newComment, post) {  //发送评论信息
+    sendNewComment(newComment, post) {
       const useriD = sessionStorage.getItem("userID");
       const userID = JSON.parse(useriD);
       // this.$message.success("消息"+newComment+"用户"+userID+"帖子"+post.postID);
@@ -324,7 +325,7 @@ export default {
       console.log('Camera icon clicked!');
       // 可以添加跳转逻辑或其他操作
       this.$router.push('/publish');
-    },  //发布说说
+    },
     formatTime(time) {
       // const options = {
       //   year: 'numeric',
@@ -337,7 +338,7 @@ export default {
       // };
       // return new Intl.DateTimeFormat('zh-CN', options).format(new Date(time));
       return moment(time).format('YYYY-MM-DD HH:mm:ss');
-    },   //时间显示格式
+    },
     toggleFullscreen(event) {
       this.$message.error("图片查看功能-未完成");
     },
@@ -347,12 +348,9 @@ export default {
 
 <style scoped>
 .container{
-  max-width: 500px;
+  max-width: 450px;
   margin: 0 auto;
   min-height: 80%;
-  position: absolute;
-  left: 0;
-  right: 0;
 }
 .sidebar-trigger {
   position: absolute;
@@ -364,43 +362,18 @@ export default {
   z-index: 1001; /* Make sure it is above the sidebar */
 }
 
-.sidebar {
+
+
+
+/* 侧边菜单栏样式 */
+.sidebar-drawer {
   position: absolute;
   top: 0;
-  //opacity: 0.95;  /* 我加了毛玻璃透明 */
   left: 0;
-  height: 100%;   /* 调整菜单高度度，根据需要调整，100%为全屏 */
-  width: 60%; /* 调整菜单宽度，根据需要调整 */
-  background-color: #090723;
-  text-align: center;
-  z-index: 1001; /* 保证在.overlay之上 */
+  height: 100%;
+  z-index: 999; /* 确保侧边栏在顶层 */
+  overflow-y: auto;
 }
-
-.sidebar p{
-  color: rgba(204,204,204,1.00);
-  font-size: 13px;
-  margin-top: -10px;
-}
-
-.sidebar ul li:hover{
-  background-color: #3b3a4d;
-}
-
-.sidebar .pengyou-cebianlan-touxiang {
-  height: 200px;
-  width: 100%;
-}
-.sidebar .pengyou-cebianlan-touxiang img{
-  width: 120px;
-  height: 120px;
-  border-radius: 100%;
-  margin-top: 30px;
-  transition: all 2s;
-  right: 0px;
-  border: 5px solid rgba(255,255,255,0.3);
-  cursor: pointer;;
-}
-
 .moreMenu{
   display: block;
   width: 60px;

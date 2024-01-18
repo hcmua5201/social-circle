@@ -16,7 +16,7 @@ public interface PostMapper {
     @Select("SELECT * FROM Post WHERE postID = #{postID}")
     Post findByID(Long postID);
 
-    @Select("SELECT p.postID, p.content, p.image, p.time, u.avatar, u.nickname, u.backgroundImagePath, " +
+    @Select("SELECT p.postID, p.content, p.image, p.time,p.address, u.avatar, u.nickname, u.backgroundImagePath, " +
             "COUNT(DISTINCT l.postID) as likeCount, " +
             "(SELECT GROUP_CONCAT(c1.content) FROM comment c1 WHERE c1.postID = p.postID) as comments, " +
             "(SELECT GROUP_CONCAT(u1.nickname) FROM comment c1 LEFT JOIN user u1 ON c1.userID = u1.userID WHERE c1.postID = p.postID) as commenters, " +
@@ -36,6 +36,7 @@ public interface PostMapper {
             @Result(property = "content", column = "content"),
             @Result(property = "image", column = "image"),
             @Result(property = "time", column = "time"),
+            @Result(property = "address", column = "address"),
             @Result(property = "author.avatar", column = "avatar"),
             @Result(property = "author.nickname", column = "nickname"),
             @Result(property = "author.backgroundImagePath", column = "backgroundImagePath"),
