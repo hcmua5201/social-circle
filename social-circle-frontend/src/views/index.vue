@@ -1,47 +1,54 @@
 <template>
   <div class="container">
+
+    <div v-if="sidebarVisible" class="sidebar" @click="toggleSidebar">
+      <el-col :span="24">
+        <div class="pengyou-cebianlan-touxiang">
+          <img :src="user.avatar">
+        </div>
+        <p>欢迎你： {{user.nickname}}</p>
+        <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            background-color="#090723"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+        >
+          <el-menu-item index="1" >
+            <template #title>
+              <el-icon><location /></el-icon>
+              <span>首页</span>
+            </template>
+          </el-menu-item>
+          <el-menu-item index="3" >
+            <el-icon><document /></el-icon>
+            <span>修改资料</span>
+          </el-menu-item>
+          <el-menu-item index="4">
+            <el-icon><setting /></el-icon>
+            <span>退出登录</span>
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+    </div>
+
     <!-- 朋友圈背景壁纸 -->
     <div class="top">
-      <!-- 侧边栏触发按钮 -->
-      <div class="sidebar-trigger" @click="toggleSidebar">
-        <el-icon><medal /></el-icon>
-      </div>
-      <!-- 侧边菜单栏 -->
-      <div v-if="sidebarVisible" class="overlay" @click="toggleSidebar"></div>
-      <div v-if="sidebarVisible" class="sidebar">
-        <el-col :span="24">
-          <p>菜单</p>
-          <el-menu
-              default-active="2"
-              class="el-menu-vertical-demo"
-              background-color="#545c64"
-              text-color="#fff"
-              active-text-color="#ffd04b"
-          >
-            <el-menu-item index="1" >
-              <template #title>
-                <el-icon><location /></el-icon>
-                <span>Navigator One</span>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="3" >
-              <el-icon><document /></el-icon>
-              <span>Navigator Three</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <el-icon><setting /></el-icon>
-              <span>Navigator Four</span>
-            </el-menu-item>
-          </el-menu>
-        </el-col>
-      </div>
+
       <el-row class="background" :style="{ backgroundImage: 'url(' + user.backgroundImage + ')' }">
+
         <el-col :span="24">
           <!-- 用户头像放于背景右下角 -->
           <div class="user-info">
             <span class="user-nickname">{{ user.nickname }}</span>
             <img class="user-avatar" :src="user.avatar" alt="用户头像">
           </div>
+
+          <!-- 侧边栏触发按钮 -->
+          <div class="sidebar-trigger" @click="toggleSidebar">
+            <el-icon><medal /></el-icon>
+          </div>
+
           <!-- 相机图标，点击执行函数 -->
           <div class="camera-icon" @click="handleCameraClick">
             <img src="../assets/photo.png" alt="相机de图标">
@@ -340,9 +347,12 @@ export default {
 
 <style scoped>
 .container{
-  max-width: 450px;
+  max-width: 500px;
   margin: 0 auto;
   min-height: 80%;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 .sidebar-trigger {
   position: absolute;
@@ -354,27 +364,41 @@ export default {
   z-index: 1001; /* Make sure it is above the sidebar */
 }
 
-.overlay {
-  position: fixed;
+.sidebar {
+  position: absolute;
   top: 0;
+  //opacity: 0.95;  /* 我加了毛玻璃透明 */
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3); /* 背景颜色及透明度，根据需要调整 */
-  z-index: 1000; /* 保证在菜单之下 */
+  height: 100%;   /* 调整菜单高度度，根据需要调整，100%为全屏 */
+  width: 60%; /* 调整菜单宽度，根据需要调整 */
+  background-color: #090723;
+  text-align: center;
+  z-index: 1001; /* 保证在.overlay之上 */
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  opacity: 0.95;  /* 我加了毛玻璃透明 */
-  left: 0;
-  height: 50%;   /* 调整菜单高度度，根据需要调整，100%为全屏 */
-  width: auto; /* 调整菜单宽度，根据需要调整 */
-  background-color: #545c64;
-  text-align: center;
-  overflow-y: auto;
-  z-index: 1001; /* 保证在.overlay之上 */
+.sidebar p{
+  color: rgba(204,204,204,1.00);
+  font-size: 13px;
+  margin-top: -10px;
+}
+
+.sidebar ul li:hover{
+  background-color: #3b3a4d;
+}
+
+.sidebar .pengyou-cebianlan-touxiang {
+  height: 200px;
+  width: 100%;
+}
+.sidebar .pengyou-cebianlan-touxiang img{
+  width: 120px;
+  height: 120px;
+  border-radius: 100%;
+  margin-top: 30px;
+  transition: all 2s;
+  right: 0px;
+  border: 5px solid rgba(255,255,255,0.3);
+  cursor: pointer;;
 }
 
 .moreMenu{

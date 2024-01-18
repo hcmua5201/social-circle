@@ -84,7 +84,7 @@ export default {
 }
 .container{
   background-color: #fff;
-  max-width: 450px;
+  max-width: 500px;
   margin: 0 auto;
   min-height: 90vh;
 }
