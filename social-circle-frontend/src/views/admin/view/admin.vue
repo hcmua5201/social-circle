@@ -2,8 +2,13 @@
 
 
 
+import Header from "../components/Header.vue";
+import Aside from "../components/Aside.vue";
+
 export default {
   components:{
+    Aside,
+    Header
 
   }
 }
@@ -14,11 +19,11 @@ export default {
     <div class="common-layout">
       <el-container>
         <el-header style="padding: 0">
-          <h1> 你好</h1>>
+          <Header></Header>
         </el-header>
         <el-container>
           <el-aside width="200px" >
-            <h1> 你好</h1>>
+           <Aside></Aside>
           </el-aside>
           <el-main class="main">
             <router-view></router-view>

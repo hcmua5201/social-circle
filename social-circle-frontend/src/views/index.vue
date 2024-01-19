@@ -30,7 +30,7 @@
                 <span>管理员操作</span>
               </template>
               <el-menu-item-group title="管理员">
-                <el-menu-item index="/admin">后台管理</el-menu-item>
+                <el-menu-item index="/admin/main_success">后台管理</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
             <el-menu-item index="3" >
