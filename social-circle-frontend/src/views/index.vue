@@ -2,12 +2,11 @@
   <div class="container">
     <!-- 朋友圈背景壁纸 -->
     <div class="top">
-      <!-- 侧边栏触发按钮 -->
-      <div class="sidebar-trigger" @click="toggleSidebar">
-        <el-icon><medal /></el-icon>
-      </div>
       <!-- 侧边菜单栏 -->
-      <el-drawer v-model="sidebarVisible" size="200px" direction="ltr" class="sidebar-drawer">
+      <el-drawer v-model="sidebarVisible"
+                 size="300px"
+                 direction="ltr"
+                 class="sidebar-drawer">
         <el-col :span="24">
 
           <el-menu
@@ -18,7 +17,12 @@
               active-text-color="#ffd04b"
               router
           >
-            <h1 style="text-align: center">你好</h1>
+<!--            <h1 style="text-align: center">你好</h1>-->
+
+            <img :src="user.avatar" class="userImg">
+            <span>{{user.nickname}}</span>
+
+
             <el-sub-menu index="1">
               <template #title>
                 <el-icon><location /></el-icon>
@@ -46,6 +50,12 @@
             <span class="user-nickname">{{ user.nickname }}</span>
             <img class="user-avatar" :src="user.avatar" alt="用户头像">
           </div>
+
+          <!-- 侧边栏触发按钮 -->
+          <div class="sidebar-trigger" @click="toggleSidebar">
+            <el-icon><medal /></el-icon>
+          </div>
+
           <!-- 相机图标，点击执行函数 -->
           <div class="camera-icon" @click="handleCameraClick">
             <img src="../assets/photo.png" alt="相机de图标">
@@ -346,28 +356,9 @@ export default {
   max-width: 450px;
   margin: 0 auto;
   min-height: 80%;
-}
-.sidebar-trigger {
   position: absolute;
-  top: 20px;  /* 调整上边距 */
-  left: 20px;  /* 调整左边距 */
-  font-size: 24px;
-  color: #fff;
-  cursor: pointer;
-  z-index: 1001; /* Make sure it is above the sidebar */
-}
-
-
-
-
-/* 侧边菜单栏样式 */
-.sidebar-drawer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  z-index: 999; /* 确保侧边栏在顶层 */
-  overflow-y: auto;
+  left:0;
+  right: 0;
 }
 .moreMenu{
   display: block;
@@ -422,6 +413,42 @@ div.top{
   text-align: right;
 }
 
+.sidebar-trigger {
+  position: absolute;
+  top: 10px;  /* 调整上边距 */
+  left: 10px;  /* 调整左边距 */
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 1001; /* Make sure it is above the sidebar */
+}
+
+/* 侧边菜单栏样式 */
+.sidebar-drawer {
+  height: 100%;
+  z-index: 999; /* 确保侧边栏在顶层 */
+  overflow-y: auto;
+  background-color: #090723;
+}
+
+.sidebar-drawer img.userImg{
+  display: block;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 0 auto;
+  border: 4px solid #fff;
+}
+.sidebar-drawer img.userImg:hover{
+  border: 4px solid skyblue;
+}
+
+.sidebar-drawer span{
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+}
 .camera-icon {
   position: absolute;
   top: -80px;
