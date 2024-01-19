@@ -4,8 +4,9 @@
     <div class="top">
       <!-- 侧边菜单栏 -->
       <el-drawer v-model="sidebarVisible"
-                 size="300px"
+                 size="200px"
                  direction="ltr"
+                 style="background-color: rgb(84, 92, 100)"
                  class="sidebar-drawer">
         <el-col :span="24">
 
@@ -433,8 +434,8 @@ div.top{
 
 .sidebar-drawer img.userImg{
   display: block;
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   margin: 0 auto;
   border: 4px solid #fff;
