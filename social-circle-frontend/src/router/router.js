@@ -3,7 +3,8 @@ import index from "../views/index.vue";
 import login from "../views/login.vue";
 import register from "../views/register.vue"
 import publish from "../views/publish.vue"
-import admin from "../views/admin/admin.vue";
+import admin from "../views/admin/view/admin.vue";
+import main_success from "../views/admin/components/main_success.vue";
 
 const router=createRouter({
     history:createWebHistory(),
@@ -26,7 +27,13 @@ const router=createRouter({
         },
         {
             path:'/admin',
-            component:admin
+            component:admin,
+            children:[
+                {
+                    path:'main_success',
+                    component:main_success
+                }
+            ]
         }
     ]
 })
