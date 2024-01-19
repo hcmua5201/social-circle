@@ -4,17 +4,24 @@ import login from "../views/login.vue";
 import register from "../views/register.vue"
 import publish from "../views/publish.vue"
 import admin from "../views/admin/admin.vue";
+import shouye from "../views/shouye.vue";
+import login1 from "../views/login1.vue";
+import register1 from "../views/register1.vue";
 
 const router=createRouter({
     history:createWebHistory(),
     routes:[
         {
             path:'/',
-            component:login
+            component:shouye
+        },
+        {
+            path:'/login',
+            component:login1
         },
         {
             path:'/register',
-            component:register
+            component:register1
         },
         {
             path:'/index',

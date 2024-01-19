@@ -92,11 +92,12 @@ export default {
 <style scoped>
 .login-container {
 
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-width: 450px;
+  margin: 0 auto;
+  min-height: 96%;
+  position: absolute;
+  left:0;
+  right: 0;
+  border: 1px solid;
 }
 </style>
