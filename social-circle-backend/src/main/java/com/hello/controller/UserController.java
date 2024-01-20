@@ -28,7 +28,7 @@ public class UserController {
         if (s!=null){
             return new Result(222,"根据用户名查询头像成功",s);
         }
-        return new Result(444,"根据用户名查询头像失败",null);
+        return new Result(444,"根据用户名查询头像失败","/src/assets/icon.png");
     }
 
     @GetMapping("/searchAvatarByEmail/{email}")
@@ -38,7 +38,7 @@ public class UserController {
         if (s!=null){
             return new Result(222,"根据邮箱查询头像成功",s);
         }
-        return new Result(444,"根据邮箱查询头像失败",null);
+        return new Result(444,"根据邮箱查询头像失败","/src/assets/icon.png");
     }
 
     @PostMapping("/loginByUserAndPwd")

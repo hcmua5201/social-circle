@@ -9,7 +9,7 @@
 
 
         <div class="userImg">
-          <img src="../assets/icon.png" >
+          <img :src="UserImgUrl" >
         </div>
 
         <div class="line">
@@ -19,7 +19,7 @@
 
         <div class="line">
           <div class="left">密码</div>
-          <input v-model="password" type="text" @input="selectUserImg" class="right" placeholder="请填写密码">
+          <input v-model="password" @focus="selectUserImg" type="text" class="right" placeholder="请填写密码">
         </div>
 
       </div>
@@ -48,6 +48,7 @@ import axios from "axios";
   export default {
     data(){
       return{
+        UserImgUrl:'/src/assets/icon.png',
         loginType:'用户名',
         loginTypeText:'用邮箱登录',
         usernameOrEmail:'',
@@ -59,11 +60,24 @@ import axios from "axios";
         this.$router.push('/')
       },
       switchLoginType(){
+        this.usernameOrEmail =''
+        this.password = ''
         this.loginType = this.loginType === '用户名' ? '邮箱' : '用户名'
         this.loginTypeText = this.loginTypeText === '用邮箱登录' ? '用户名登录' : '用邮箱登录'
       },
       selectUserImg(){
         //当用户输入完成用户名/邮箱后，进行一次用户查询，替换上方微信头像为用户头像，如未查到，则保留微信头像
+        if ((this.loginType ==='用户名')&&this.usernameOrEmail!==''){
+          // this.$message.success("用户名登录："+this.usernameOrEmail)
+          axios("/api/users/searchAvatarByUsername/"+this.usernameOrEmail).then(res =>{
+            this.UserImgUrl = res.data.obj
+          })
+        }else {
+          // this.$message.success("邮箱登录："+this.usernameOrEmail)
+          axios("/api/users/searchAvatarByEmail/"+this.usernameOrEmail).then(res =>{
+            this.UserImgUrl = res.data.obj
+          })
+        }
       },
       login(){
         //此处执行登录逻辑，同时根据loginType的类型执行对应的登录请求
