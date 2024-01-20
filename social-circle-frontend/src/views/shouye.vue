@@ -28,7 +28,7 @@ export default {
 
 <style scoped>
 .container{
-  max-width: 460px;
+  max-width: 500px;
   margin: 0 auto;
   min-height: 98vh;
   position: absolute;

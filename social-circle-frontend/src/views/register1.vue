@@ -42,7 +42,7 @@
       </div>
 
       <div class="tips">
-        <input type="checkbox" @click="showTips">我已阅读并同意 <a>&lt;&lt;阿巴阿巴阿巴协议&gt;&gt;</a>
+        <input type="checkbox">我已阅读并同意 <a @click="showTips">&lt;&lt;阿巴阿巴阿巴协议&gt;&gt;</a>
       </div>
 
       <div class="register">
@@ -67,7 +67,7 @@ export default {
   data(){
     return {
       registerForm: {
-        avatar: 'https://s2.loli.net/2024/01/13/lfUKxHnX3wOFWJT.jpg',
+        avatar: '/src/assets/nullUser.png',
         username: '',
         password: '',
         email: '',
@@ -83,6 +83,9 @@ export default {
   methods:{
     goShouYe(){
       this.$router.push('/')
+    },
+    showTips(){
+      this.$message.info('根据阿巴阿巴协议规定，你是🐖！！！')
     },
     upload(file) {
       // this.beforeAvatarUpload()
@@ -277,12 +280,13 @@ main h1{
   font-weight: 500;
   margin-top: 10px;
   text-align: center;
+  text-indent: 0;
 }
 
 main div.info{
   width: 100%;
   height: 400px;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 main div.userImg{
   width: 100%;
@@ -361,8 +365,8 @@ main div.tips a{
 
 main div.register{
   width: 100%;
-  height: 80px;
-  margin-top: 100px;
+  height: 76px;
+  margin-top: 80px;
   //background-color: #fff;
 }
 main div.register button{
