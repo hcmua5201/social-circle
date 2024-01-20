@@ -104,7 +104,7 @@ export default {
           this.avatar=res.data.data.url
         }else {
           this.$message.info("头像已存在，但不影响使用，")
-          this.avatar=res.data.images
+          this.registerForm.avatar=res.data.images
         }
 
       })
