@@ -6,6 +6,9 @@
     left:0;
     right: 0;
     background-color: #ededed;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    border: 4px solid whitesmoke;
 }
 
 header button{
@@ -13,6 +16,7 @@ header button{
     font-weight: bold;
     border: none;
     color: #000;
+    border-radius: 10px;
 }
 main{
     width: 100%;
