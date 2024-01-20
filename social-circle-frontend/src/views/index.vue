@@ -37,7 +37,7 @@
               <el-icon><document /></el-icon>
               <span>修改密码</span>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item @click="logout">
               <el-icon><setting /></el-icon>
               <span>退出登录</span>
             </el-menu-item>
@@ -348,6 +348,16 @@ export default {
     toggleFullscreen(event) {
       this.$message.error("图片查看功能-未完成");
     },
+    logout(){
+      this.$confirm("将退出该账号，是否继续？", "提示", {type: "info"}).then(() => {
+        this.$router.push('/')
+        sessionStorage.removeItem('userID');
+        localStorage.removeItem("login_info")
+        this.$message.success("退出成功！")
+      }).catch(() => {
+        this.$message.info("取消操作");
+      });
+    }
   }
 };
 </script>
