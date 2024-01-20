@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UserService {
 
+    String searchAvatarByUsername(@Param("username") String username);
+    String searchAvatarByEmail(@Param("email") String email);
     User loginByUserAndPwd(@Param("username") String username, @Param("password") String password);
 
     User loginByEmailAndPwd(@Param("email") String email,@Param("password") String password);

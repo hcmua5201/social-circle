@@ -15,6 +15,16 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
+    public String searchAvatarByUsername(String username) {
+        return userMapper.searchAvatarByUsername(username);
+    }
+
+    @Override
+    public String searchAvatarByEmail(String email) {
+        return userMapper.searchAvatarByEmail(email);
+    }
+
+    @Override
     public User loginByUserAndPwd(String username, String password) {
         return userMapper.loginByUserAndPwd(username,password);
     }

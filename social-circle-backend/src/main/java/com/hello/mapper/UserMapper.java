@@ -7,6 +7,12 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
 
+    @Select("select avatar from user where username=#{username}")
+    String searchAvatarByUsername(@Param("username") String username);
+
+    @Select("select avatar from user where email=#{email}")
+    String searchAvatarByEmail(@Param("email") String email);
+
     @Select("SELECT backgroundImagePath FROM User WHERE userId = #{userId}")
     String getBackgroundImagePathById(@Param("userId") Long userId);
 

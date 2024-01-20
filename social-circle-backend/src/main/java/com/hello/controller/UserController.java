@@ -20,6 +20,27 @@ public class UserController {
     private UserService userService;
 
 
+    //查询头像
+    @GetMapping("/searchAvatarByUsername/{username}")
+    public Result searchAvatarByUsername(@PathVariable String username){
+        System.out.println("登录页面用户输入的用户名:"+username);
+        String s = userService.searchAvatarByUsername(username);
+        if (s!=null){
+            return new Result(222,"根据用户名查询头像成功",s);
+        }
+        return new Result(444,"根据用户名查询头像失败",null);
+    }
+
+    @GetMapping("/searchAvatarByEmail/{email}")
+    public Result searchAvatarByEmail(@PathVariable String email){
+        System.out.println("登录页面用户输入的邮箱:"+email);
+        String s = userService.searchAvatarByEmail(email);
+        if (s!=null){
+            return new Result(222,"根据邮箱查询头像成功",s);
+        }
+        return new Result(444,"根据邮箱查询头像失败",null);
+    }
+
     @PostMapping("/loginByUserAndPwd")
     public Result loginByUserAndPwd(@RequestParam("username")String username,
                                 @RequestParam("password") String password){
