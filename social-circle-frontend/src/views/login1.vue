@@ -14,18 +14,18 @@
 
         <div class="line">
           <div class="left">账号</div>
-          <input type="text" class="right" :placeholder="loginType">
+          <input v-model="usernameOrEmail" type="text" class="right" :placeholder="loginType">
         </div>
 
         <div class="line">
           <div class="left">密码</div>
-          <input type="text" @input="selectUserImg" class="right" placeholder="请填写密码">
+          <input v-model="password" type="text" @input="selectUserImg" class="right" placeholder="请填写密码">
         </div>
 
       </div>
 
       <div class="switch">
-        <button @click="switchLoginType">用邮箱登录</button>
+        <button @click="switchLoginType">{{ loginTypeText }}</button>
       </div>
 
       <div class="login">
@@ -43,12 +43,17 @@
 
 <script>
 import '../assets/css/login.css';
+import axios from "axios";
 
   export default {
     data(){
       return{
-        loginType:'用户名'
-        // loginType:'邮箱'
+        loginType:'用户名',
+        loginTypeText:'用邮箱登录',
+        usernameOrEmail:'',
+        password:'',
+
+
       }
     },
     methods:{
@@ -57,13 +62,63 @@ import '../assets/css/login.css';
       },
       switchLoginType(){
         this.loginType = this.loginType === '用户名' ? '邮箱' : '用户名'
+        this.loginTypeText = this.loginTypeText === '用邮箱登录' ? '用户名登录' : '用邮箱登录'
       },
       selectUserImg(){
         //当用户输入完成用户名/邮箱后，进行一次用户查询，替换上方微信头像为用户头像，如未查到，则保留微信头像
       },
       login(){
         //此处执行登录逻辑，同时根据loginType的类型执行对应的登录请求
-        this.$message.success("登录")
+        if (this.loginType==='用户名'){
+          // 用户名密码登录
+          // 检查输入框是否为空
+          if (!this.usernameOrEmail || !this.password) {
+            this.$message.error('用户名和密码不能为空');
+            return;
+          }
+          let requestData = {};
+          requestData = { username: this.usernameOrEmail, password: this.password };
+          axios({
+            method:'post',
+            url:'/api/users/loginByUserAndPwd',
+            params:{username:requestData.username,password:requestData.password}
+          }).then((response)=>{
+            // console.log(response.data.code)
+            if (response.data.code===222){
+              this.$message.success(response.data.msg)
+              localStorage.setItem("login_info",JSON.stringify(response.data.obj))
+              sessionStorage.setItem("userID",JSON.stringify(response.data.obj.userId))
+              this.$router.push('/index');
+            }else {
+              this.$message.error(response.data.msg)
+            }
+          })
+        }else {
+          //  邮箱登录
+          // 检查输入框是否为空
+          if (!this.usernameOrEmail || !this.password) {
+            this.$message.error('邮箱和密码不能为空');
+            return;
+          }
+          let requestData = {};
+          requestData = { email: this.usernameOrEmail, password: this.password };
+          axios({
+            method:'post',
+            url:'/api/users/loginByEmailAndPwd',
+            params:{email:requestData.email,password:requestData.password}
+          }).then((response)=>{
+            // console.log(response.data.code)
+            if (response.data.code===222){
+              this.$message.success(response.data.msg)
+              localStorage.setItem("login_info",JSON.stringify(response.data.obj))
+              sessionStorage.setItem("userID",JSON.stringify(response.data.obj.userId))
+              this.$router.push('/index');
+            }else {
+              this.$message.error(response.data.msg)
+            }
+          })
+        }
+
       }
     }
   }

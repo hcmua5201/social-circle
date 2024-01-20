@@ -131,6 +131,7 @@ export default {
         }).then((response)=>{
           console.log(response.data)
           if (response.data.code===222){
+            this.registerForm=''
             this.$message.success(response.data.msg)
           }else {
             this.$message.error(response.data.msg)

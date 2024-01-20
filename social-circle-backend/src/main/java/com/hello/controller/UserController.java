@@ -56,6 +56,7 @@ public class UserController {
 
     @PostMapping("/add")
     public Result addUser(@RequestBody User user) {
+        user.setNickname(user.getUsername());
         //检查用户名是否被注册
         User checkByUsername = userService.checkByUsername(user.getUsername());
         if (checkByUsername != null){

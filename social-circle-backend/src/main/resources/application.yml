@@ -25,6 +25,14 @@ spring:
     username: 1438679361@qq.com
     password: umxwrzkaxztegeif
     host: smtp.qq.com
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 #图片上传地址，改为服务器可以访问和写入的文件夹 vue不允许使用本地绝对路径显示图片
 upload:
