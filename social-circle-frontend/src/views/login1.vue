@@ -29,7 +29,7 @@
       </div>
 
       <div class="login">
-        <button @click="login">登录</button>
+        <button @click="login" :disabled="usernameOrEmail===''||password===''">登录</button>
       </div>
     </main>
     <footer>
@@ -52,8 +52,6 @@ import axios from "axios";
         loginTypeText:'用邮箱登录',
         usernameOrEmail:'',
         password:'',
-
-
       }
     },
     methods:{

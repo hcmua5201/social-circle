@@ -47,7 +47,7 @@ export default {
 }
 
 .container .btnDiv button{
-  width: 200px;
+  width: 40%;
   height: 46px;
   margin-top: 10px;
   position: absolute;

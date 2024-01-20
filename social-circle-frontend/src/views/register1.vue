@@ -42,11 +42,11 @@
       </div>
 
       <div class="tips">
-        <input type="checkbox">我已阅读并同意 <a @click="showTips">&lt;&lt;阿巴阿巴阿巴协议&gt;&gt;</a>
+        <input type="checkbox" v-model="checked">我已阅读并同意 <a @click="showTips">&lt;&lt;阿巴阿巴阿巴协议&gt;&gt;</a>
       </div>
 
       <div class="register">
-        <button @click="register">注册</button>
+        <button @click="register" :disabled="!checked">注册</button>
       </div>
     </main>
     <footer>
@@ -71,13 +71,13 @@ export default {
         username: '',
         password: '',
         email: '',
-
         verificationCode: ''
       },
       fullEmail: '',
       verificationCodeBtnDisabled: false,
       verificationCodeBtnText: '获取验证码',
       verificationCodeTimeout: null,
+      checked:false
     }
   },
   methods:{
@@ -270,15 +270,14 @@ header button{
 }
 main{
   width: 100%;
-  height: 60vh;
-  margin-top: 100px;
-  //background-color: gray;
+  height: 80vh;
+  margin-top: 8%;
 }
 
 main h1{
   font-size: 24px;
   font-weight: 500;
-  margin-top: 10px;
+  //margin-top: 10px;
   text-align: center;
   text-indent: 0;
 }
@@ -286,7 +285,7 @@ main h1{
 main div.info{
   width: 100%;
   height: 400px;
-  margin-top: 60px;
+  //margin-top: 60px;
 }
 main div.userImg{
   width: 100%;
@@ -304,10 +303,10 @@ main div.userImg img{
 
 main div.line{
   width: 100%;
-  height: 50px;
+  height: 40px;
   border: none;
   margin-top: 20px;
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid lightgray;
 }
 main div.line .left{
   float: left;
@@ -332,7 +331,7 @@ main div.line input{
 main div.line.VerificationCode input{
   width: 50%;
   float: left;
-  margin-left: 40px;
+  margin-left: 3%;
 }
 main div.line.VerificationCode button{
   display: block;
@@ -342,14 +341,15 @@ main div.line.VerificationCode button{
   border-radius: 5px;
   border: none;
   background-color: #07c160;
-  color: #fff;padding: 0 10px;
+  color: #fff;
+  padding: 0 10px;
 }
 
 main div.tips{
   width: 100%;
   height: 30px;
   color: #000;
-  margin-top: 10px;
+  margin-top: -30px;
 }
 main div.tips input{
   font-size: 16px;
@@ -382,13 +382,17 @@ main div.register button{
   margin: 0 auto;
   cursor: pointer;
 }
+main div.register button:disabled{
+  background-color: #7ad7a6;
+}
+
 main div.register button:hover{
   background-color: #07c160;
 }
 
 footer{
   width: 100%;
-  height: 40px;
+  height: 4vh;
   position: absolute;
   bottom: 0;
   //background-color: #fff;
