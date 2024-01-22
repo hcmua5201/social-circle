@@ -349,16 +349,6 @@ export default {
       this.$router.push('/publish');
     },
     formatTime(time) {
-      // const options = {
-      //   year: 'numeric',
-      //   month: '2-digit',
-      //   day: '2-digit',
-      //   hour: '2-digit',
-      //   minute: '2-digit',
-      //   second: '2-digit',
-      //   hour12: false, // 指定 24 小时制
-      // };
-      // return new Intl.DateTimeFormat('zh-CN', options).format(new Date(time));
       return moment(time).format('YYYY-MM-DD HH:mm:ss');
     },
     toggleFullscreen(event) {
@@ -566,7 +556,8 @@ img.post-avatar:hover {
 }
 
 .post-image {
-  max-width: 100%;
+  max-width: 30%;
+  margin: 2px;
   margin-top: 10px;
 }
 
