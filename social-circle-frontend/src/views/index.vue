@@ -18,27 +18,33 @@
               active-text-color="#ffd04b"
               router
           >
-<!--            <h1 style="text-align: center">你好</h1>-->
+            <!--            <h1 style="text-align: center">你好</h1>-->
 
             <img :src="user.avatar" class="userImg">
-            <span>{{user.nickname}}</span>
+            <span>{{ user.nickname }}</span>
 
 
             <el-sub-menu index="1">
               <template #title>
-                <el-icon><location /></el-icon>
+                <el-icon>
+                  <location/>
+                </el-icon>
                 <span>管理员操作</span>
               </template>
               <el-menu-item-group title="管理员">
                 <el-menu-item index="/admin/main_success">后台管理</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
-            <el-menu-item index="3" >
-              <el-icon><document /></el-icon>
+            <el-menu-item index="3">
+              <el-icon>
+                <document/>
+              </el-icon>
               <span>修改密码</span>
             </el-menu-item>
             <el-menu-item @click="logout">
-              <el-icon><setting /></el-icon>
+              <el-icon>
+                <setting/>
+              </el-icon>
               <span>退出登录</span>
             </el-menu-item>
           </el-menu>
@@ -54,7 +60,9 @@
 
           <!-- 侧边栏触发按钮 -->
           <div class="sidebar-trigger" @click="toggleSidebar">
-            <el-icon><medal /></el-icon>
+            <el-icon>
+              <medal/>
+            </el-icon>
           </div>
 
           <!-- 相机图标，点击执行函数 -->
@@ -90,7 +98,8 @@
                 <div class="right">
                   <!-- 点赞和评论按钮 -->
                   <div class="post-actions">
-                    <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }" @click="toggleLike(post)"></i>
+                    <i class="fa" :class="{ 'fa-heart': isLiked(post), 'fa-heart-o': !isLiked(post) }"
+                       @click="toggleLike(post)"></i>
                     <el-button @click="showComments(post.postID)" text>评论</el-button>
                   </div>
                 </div>
@@ -102,7 +111,8 @@
                 </div>
                 <div v-if="post.comments && post.comments.length > 0" class="post-comments-list">
                   <div v-for="(comment, index) in post.comments" :key="index" class="post-comment">
-                    <span class="comment-author">{{ post.commenters[index] }}</span>：<span @click="showMore(index,comment)">{{ comment }}</span>
+                    <span class="comment-author">{{ post.commenters[index] }}</span>：<span
+                      @click="showMore(index,comment)">{{ comment }}</span>
                     <div class="moreMenu" v-show="index === this.selectedCommentId">
                       <p @click="copyComment(comment)">复制</p>
                       <p>删除</p>
@@ -112,16 +122,19 @@
                 </div>
               </div>
               <!-- 评论输入框 -->
-              <el-input v-show="post.showCommentInput" class="comment-input" v-model="newComment" placeholder="发表评论..." @keyup.enter="sendNewComment(newComment, post)" />
+              <el-input v-show="post.showCommentInput" class="comment-input" v-model="newComment"
+                        placeholder="发表评论..." @keyup.enter="sendNewComment(newComment, post)"/>
               <!-- 提交评论按钮 -->
-              <el-button v-show="post.showCommentInput" class="comment-submit" @click="sendNewComment(newComment, post)" type="success">提交</el-button>
+              <el-button v-show="post.showCommentInput" class="comment-submit" @click="sendNewComment(newComment, post)"
+                         type="success">提交
+              </el-button>
 
             </el-card>
           </el-col>
         </el-row>
       </div>
     </div>
-    <div id="goTop" @click="goTop"> ⬆ </div>
+    <div id="goTop" @click="goTop"> ⬆</div>
   </div>
 </template>
 
@@ -147,36 +160,37 @@ export default {
       newComment: "",
       isFullscreen: false,
       moreMenuStatus: false,
-      selectedCommentId:-1,
+      selectedCommentId: -1,
     };
   },
   created() {
+
     this.loadUserInfoAndBackgroundImage();
     // 发送请求获取朋友圈数据
-  this.getAll();
-  //多执行几次，保证页面数据显示正确
-   this.upDateComment();
-   this.upDateComment();
-   this.upDateComment();
+    this.getAll();
+    //多执行几次，保证页面数据显示正确
+    this.upDateComment();
+    this.upDateComment();
+    this.upDateComment();
   },
   methods: {
     toggleSidebar() {
       this.sidebarVisible = !this.sidebarVisible;
     },
-    showMore(index,comment){
-      this.$message.info("点击评论："+comment)
-      this.selectedCommentId=index;
+    showMore(index, comment) {
+      this.$message.info("点击评论：" + comment)
+      this.selectedCommentId = index;
       console.log(comment)
     },
-    goTop(){
-      window.scrollTo(0,0);
+    goTop() {
+      window.scrollTo(0, 0);
     },
-    copyComment(comment){
-      this.$message.success("已复制评论: "+comment)
+    copyComment(comment) {
+      this.$message.success("已复制评论: " + comment)
       navigator.clipboard.writeText(comment);
       this.selectedCommentId = -1;
     },
-    getAll(){
+    getAll() {
       axios.get('/api/posts/all')  // 替换成实际的后端接口地址
           .then(response => {
             console.log(response.data.obj)
@@ -186,11 +200,11 @@ export default {
             console.error('Error fetching posts:', error);
           });
     },
-    async upDateComment(){
+    async upDateComment() {
       axios({
-        method:'get',
-        url:'/api/comments/UpdateComment'
-      }).then((response)=>{
+        method: 'get',
+        url: '/api/comments/UpdateComment'
+      }).then((response) => {
         console.log(response.data)
         this.updateCommentsData(response.data.obj);
       })
@@ -230,14 +244,14 @@ export default {
 
       if (hasLiked) {
         // 如果已经点赞，发送请求取消点赞
-        requestData = { userID: userID, postID: post.postID };
+        requestData = {userID: userID, postID: post.postID};
         axios({
           method: 'post',
           url: '/api/likes/remove',
           params: requestData  // 修正此行，应该使用 params
         }).then(response => {
           // 处理成功的逻辑，可能需要更新点赞列表等
-          if (response.data.code===222){
+          if (response.data.code === 222) {
             this.getAll()
             this.upDateComment();
             this.upDateComment();
@@ -251,14 +265,14 @@ export default {
         });
       } else {
         // 如果未点赞，发送请求添加点赞
-        requestData = { userID: userID, postID: post.postID };
+        requestData = {userID: userID, postID: post.postID};
         axios({
           method: 'post',
           url: '/api/likes/addLike',
           params: requestData  // 修正此行，应该使用 data
         }).then(response => {
           // 处理成功的逻辑，可能需要更新点赞列表等
-          if (response.data.code===222){
+          if (response.data.code === 222) {
             this.getAll()
             this.upDateComment();
             this.upDateComment();
@@ -296,29 +310,27 @@ export default {
       // this.$message.success("消息"+newComment+"用户"+userID+"帖子"+post.postID);
       let requestData = {};
 
-      if (newComment.length>=50){
-          this.$message.warning("评论内容不能超过50字")
-      }else
-      if (newComment ===''){
-         this.$message.error("评论内容不能为空")
-      }else
-      if (newComment !== ''){
-          // this.$message.warning("评论内容通过")
-        requestData = { userID: userID, postID: post.postID,content:newComment };
+      if (newComment.length >= 50) {
+        this.$message.warning("评论内容不能超过50字")
+      } else if (newComment === '') {
+        this.$message.error("评论内容不能为空")
+      } else if (newComment !== '') {
+        // this.$message.warning("评论内容通过")
+        requestData = {userID: userID, postID: post.postID, content: newComment};
 
         axios({
-          method:'post',
-          url:'/api/comments/add',
-          params:requestData
-        }).then((response)=>{
+          method: 'post',
+          url: '/api/comments/add',
+          params: requestData
+        }).then((response) => {
           console.log(response.data)
-          if (response.data.code===222){
+          if (response.data.code === 222) {
             this.getAll();
             this.upDateComment();
             this.upDateComment();
             this.upDateComment();
             this.$message.success(response.data.msg)
-          }else {
+          } else {
             this.$message.error(response.data.msg)
           }
         })
@@ -348,7 +360,7 @@ export default {
     toggleFullscreen(event) {
       this.$message.error("图片查看功能-未完成");
     },
-    logout(){
+    logout() {
       this.$confirm("将退出该账号，是否继续？", "提示", {type: "info"}).then(() => {
         this.$router.push('/')
         sessionStorage.removeItem('userID');
@@ -363,15 +375,16 @@ export default {
 </script>
 
 <style scoped>
-.container{
+.container {
   max-width: 450px;
   margin: 0 auto;
   min-height: 80%;
   position: absolute;
-  left:0;
+  left: 0;
   right: 0;
 }
-.moreMenu{
+
+.moreMenu {
   display: block;
   width: 60px;
   height: 64px;
@@ -382,7 +395,8 @@ export default {
   /* 设置投影的颜色 */
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
 }
-.moreMenu p{
+
+.moreMenu p {
   font-size: 16px;
   line-height: 20px;
   margin: 0 auto;
@@ -391,10 +405,11 @@ export default {
   border: 1px solid #fff;
 }
 
-div.top{
+div.top {
   height: 332px;
 }
-#goTop{
+
+#goTop {
   position: fixed;
   bottom: 10px;
   right: 10px;
@@ -409,6 +424,7 @@ div.top{
   font-size: 16px;
   z-index: 1000;
 }
+
 .background {
   padding: 150px;
   background-size: cover;
@@ -426,8 +442,8 @@ div.top{
 
 .sidebar-trigger {
   position: absolute;
-  top: 10px;  /* 调整上边距 */
-  left: 10px;  /* 调整左边距 */
+  top: 10px; /* 调整上边距 */
+  left: 10px; /* 调整左边距 */
   font-size: 24px;
   color: #fff;
   cursor: pointer;
@@ -442,7 +458,7 @@ div.top{
   background-color: #090723;
 }
 
-.sidebar-drawer img.userImg{
+.sidebar-drawer img.userImg {
   display: block;
   width: 100px;
   height: 100px;
@@ -450,16 +466,18 @@ div.top{
   margin: 0 auto;
   border: 4px solid #fff;
 }
-.sidebar-drawer img.userImg:hover{
+
+.sidebar-drawer img.userImg:hover {
   border: 4px solid skyblue;
 }
 
-.sidebar-drawer span{
+.sidebar-drawer span {
   display: block;
   margin-top: 10px;
   width: 100%;
   text-align: center;
 }
+
 .camera-icon {
   position: absolute;
   top: -80px;
@@ -486,13 +504,13 @@ div.top{
   padding-right: 12px;
 }
 
-img.post-avatar{
+img.post-avatar {
   margin-left: 10px;
   transform: rotate(0deg);
   transition: transform 0.5s ease-in-out;
 }
 
-img.post-avatar:hover{
+img.post-avatar:hover {
   transform: rotate(180deg);
   transition: transform 0.5s ease-in-out;
 }
@@ -552,18 +570,20 @@ img.post-avatar:hover{
   justify-content: space-between;
   align-items: center;
 }
-.post-footer .left,.post-footer .right{
+
+.post-footer .left, .post-footer .right {
   width: 50%;
   float: left;
 }
 
-.post-time{
+.post-time {
   color: #959595;
   font-size: 12px;
   line-height: 20px;
   font-weight: bold;
 }
-.post-address{
+
+.post-address {
   color: #959595;
   font-size: 12px;
   line-height: 20px;

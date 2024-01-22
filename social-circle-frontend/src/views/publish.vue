@@ -1,27 +1,37 @@
 <template>
-<!--  动态发布页面-->
-
-  <!--  页面总容器-->
+  <!-- 动态发布页面 -->
+  <!-- 页面总容器 -->
   <div class="container">
     <div class="top">
       <div class="header">
         <div class="left" @click="backIndex">取消</div>
         <div class="right" @click="publish">发布</div>
       </div>
-        <textarea class="text" placeholder="这一刻的想法..."></textarea>
+      <textarea class="text" placeholder="这一刻的想法..."></textarea>
     </div>
 
     <div class="bottom">
       <div id="picInput">
-        <img id="img_preview1" style="" @onclick="uploadbut(1)" src="../assets/insertimg.png">
-        <img id="img_preview2" style=" display: none;" @onclick="uploadbut(2)" src="../assets/insertimg.png">
-        <img id="img_preview3" style=" display: none;" @onclick="uploadbut(3)" src="../assets/insertimg.png">
-        <img id="img_preview4" style=" display: none;" @onclick="uploadbut(4)" src="../assets/insertimg.png">
-        <img id="img_preview5" style=" display: none;" @onclick="uploadbut(5)" src="../assets/insertimg.png">
-        <img id="img_preview6" style=" display: none;" @onclick="uploadbut(6)" src="../assets/insertimg.png">
-        <img id="img_preview7" style=" display: none;" @onclick="uploadbut(7)" src="../assets/insertimg.png">
-        <img id="img_preview8" style=" display: none;" @onclick="uploadbut(8)" src="../assets/insertimg.png">
-        <img id="img_preview9" style=" display: none;" @onclick="uploadbut(9)" src="../assets/insertimg.png">
+        <el-upload
+            class="avatar-uploader"
+            :http-request="upload"
+            :show-file-list="false"
+            :before-upload="beforeAvatarUpload"
+            multiple
+        >
+          <img
+              v-if="images.length < 9"
+              class="avatar default-avatar"
+              src="../assets/insertimg.png"
+          />
+          <img
+              v-for="(image, index) in images"
+              :key="index"
+              :src="image.url"
+              class="avatar"
+              @click="viewImage(image.url)"
+          />
+        </el-upload>
       </div>
     </div>
   </div>
@@ -31,107 +41,154 @@
 import axios from "axios";
 
 export default {
-  data(){
-
+  data() {
+    return {
+      images: [],
+    };
   },
-  methods:{
-    backIndex(){
-      this.$router.push('/index')
+  created() {
+    this.getAddress();
+  },
+
+  methods: {
+    upload(file) {
+      if (this.images.length >= 9) {
+        this.$message.warning("最多只能上传 9 张图片");
+        return false; // 取消上传
+      }
+
+      const formData = new FormData();
+      formData.append("smfile", file.file);
+      axios.defaults.baseURL = "/sms";
+      axios
+          .post("/api/v2/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: "a1GaFmvrVYXdCzFM4AG5In2rjkwaAvFQ",
+            },
+          })
+          .then((res) => {
+            if (res.data.success === true) {
+              this.$message.success("上传成功");
+              this.images.push({ url: res.data.data.url });
+            } else {
+              this.$message.info("头像已存在，但不影响使用，");
+              this.images.push({ url: res.data.images });
+            }
+          });
     },
-    publish(){
+    beforeAvatarUpload(file) {
+      if (this.images.length >= 9) {
+        this.$message.warning("最多只能上传 9 张图片");
+        return false; // 取消上传
+      }
 
-      //此处api搁置，由于不精确，经常抽风返回错误地址
-      // axios.get("https://api.vvhan.com/api/getIpInfo").then(res =>{
-      //   console.log(res.data.info)
-      //   console.log(res.data.info.country)
-      //   console.log(res.data.info.prov)
-      //   console.log(res.data.info.city)
-      //   this.$message.success("发布于："+res.data.info.country+" "+res.data.info.prov+"省 "+res.data.info.city+" ")
-      // })
+      const isJPG = file.type === "image/jpeg" || file.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
 
-      // 接入IP138额度查询API,更稳定，但是付费，省着点调😭
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 或 PNG 格式！");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB！");
+      }
+
+      return isJPG && isLt2M;
+    },
+    getAddress() {
       axios({
-        url:'http://api.ipshudi.com/ip/',
-        method:'get',
-        params:{
-          token:'c065a105a93db1662ed6d2842a1ac1f3'
-        }
-      }).then(res =>{
-        console.log(res.data.data)
-        const address = res.data.data
-        this.$message.success("发布于："+address[0]+" "+address[1]+"省 "+address[2])
-      })
-      // this.$message.success("发布成功")
-      this.$router.push('/index')
-    }
+        method: "get",
+        url: "https://api.vvhan.com/api/getIpInfo",
+      }).then((response) => {
+        console.log(response.data.info);
+      });
+    },
+    backIndex() {
+      this.$router.push("/index");
+    },
+    publish() {
+      console.log(this.images);
+      console.log(this.images.length);
+      // this.$router.push("/index");
+    },
+    viewImage(imageUrl) {
+      // 处理点击图片预览的逻辑
+      console.log("View Image: ", imageUrl);
+    },
   },
   beforeRouteEnter(to, from, next) {
-
     // 添加背景色 margin:0;padding:0是为了解决vue四周有白边的问题
-
-    document.querySelector('body').setAttribute('style','margin:0;padding:0')
-
-    next()
-
-  }
-}
+    document.querySelector("body").setAttribute("style", "margin:0;padding:0");
+    next();
+  },
+};
 </script>
 
 <style scoped>
-*{
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
-.container{
+
+.container {
   background-color: #fff;
   max-width: 500px;
   margin: 0 auto;
   min-height: 90vh;
+  padding: 10px;
 }
 
-.container .top{
-  border-bottom: 1px solid #BCBCBC;
+.avatar {
+  width: calc(33.33% - 10px);
+  height: auto;
+  object-fit: cover;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.default-avatar {
+  background-image: url("../assets/insertimg.png");
+  background-size: cover;
+}
+
+.container .top {
+  border-bottom: 1px solid #bcbcbc;
   width: 94%;
   margin: 0 auto;
   height: 100%;
 }
 
-.container .top .header{
+.container .top .header {
   width: 100%;
   height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.container .top .header .left{
-  width: 40px;
-  height: 100%;
-  float: left;
-  margin-left: -1px;
-  margin-top: 8px;
+.container .top .header .left {
   color: #000000;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 }
 
-.container .top .header .right{
-  width: 40px;
-  height: 100%;
-  float: right;
-  margin-right: -1px;
-  margin-top: 8px;
+.container .top .header .right {
   color: #32b431;
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 }
-.container .top .header .right:hover{
+
+.container .top .header .right:hover {
   background-color: #999;
 }
 
-.container .top textarea.text{
+.container .top textarea.text {
   display: block;
-  width: 96%;
-  margin-top: 34px;
+  width: 100%;
+  margin-top: 10px;
   border: none;
   color: #232323;
   font-size: 20px;
@@ -140,16 +197,21 @@ export default {
   min-height: 100px;
 }
 
-.container .bottom{
+.container .bottom {
   width: 100%;
 }
-.container .bottom #picInput{
-  width: 90%;
-  margin: 12px auto 0;
+
+.container .bottom #picInput {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.container .bottom #picInput img{
-  width: 7.5rem;
-  height: 7.5rem;
+.container .bottom #picInput img {
+  width: calc(33.33% - 10px);
+  height: auto;
+  margin-bottom: 10px;
 }
 </style>
