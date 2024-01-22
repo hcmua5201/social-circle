@@ -7,29 +7,31 @@
         <div class="left" @click="backIndex">取消</div>
         <div class="right" @click="publish">发布</div>
       </div>
-      <textarea class="text" placeholder="这一刻的想法..."></textarea>
+      <textarea class="text" @input="inputHandle" placeholder="这一刻的想法..."></textarea>
     </div>
 
     <div class="bottom">
       <div id="picInput">
         <el-upload
             class="avatar-uploader"
+            list-type="picture"
             :http-request="upload"
             :show-file-list="false"
             :before-upload="beforeAvatarUpload"
             multiple
         >
           <img
-              v-if="images.length < 9"
-              class="avatar default-avatar"
-              src="../assets/insertimg.png"
-          />
-          <img
               v-for="(image, index) in images"
               :key="index"
               :src="image.url"
               class="avatar"
               @click="viewImage(image.url)"
+          />
+
+          <img
+              v-if="images.length < 9"
+              class="avatar default-avatar"
+              src="../assets/insertimg.png"
           />
         </el-upload>
       </div>
@@ -115,6 +117,9 @@ export default {
       // 处理点击图片预览的逻辑
       console.log("View Image: ", imageUrl);
     },
+    inputHandle(){
+
+    }
   },
   beforeRouteEnter(to, from, next) {
     // 添加背景色 margin:0;padding:0是为了解决vue四周有白边的问题
@@ -195,6 +200,8 @@ export default {
   outline: none;
   text-indent: 1em;
   min-height: 100px;
+  max-width: 100%;
+  min-width: 100%;
 }
 
 .container .bottom {
@@ -204,14 +211,16 @@ export default {
 .container .bottom #picInput {
   width: 100%;
   margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+}
+
+>>>.avatar-uploader .el-upload--picture {
+  display: block;
 }
 
 .container .bottom #picInput img {
-  width: calc(33.33% - 10px);
+  width: 30%;
   height: auto;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
 }
 </style>
