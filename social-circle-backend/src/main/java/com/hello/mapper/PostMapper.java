@@ -13,6 +13,9 @@ public interface PostMapper {
     @Options(useGeneratedKeys = true, keyProperty = "postID")
     void insert(Post post);
 
+    @Insert("insert into post (userID, content, image, time, address) VALUES (#{userID},#{content},#{image},#{time},#{address})")
+    int add(@Param("userID") Long userID,@Param("content") String content,@Param("image") String image,@Param("time") String time,@Param("address") String address);
+
     @Select("SELECT * FROM Post WHERE postID = #{postID}")
     Post findByID(Long postID);
 

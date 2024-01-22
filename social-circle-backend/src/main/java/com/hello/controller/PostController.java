@@ -5,6 +5,7 @@ import com.hello.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -16,9 +17,17 @@ public class PostController {
     private PostService postService;
 
     @PostMapping("/add")
-    public Result addPost(@RequestBody Post post) {
-        postService.addPost(post);
-        return new Result(200, "动态添加成功", null);
+    public Result addPost(@RequestParam Long userID, @RequestParam String content, @RequestParam String image, @RequestParam String time,@RequestParam String address) {
+//        System.out.println(userID);
+//        System.out.println(content);
+//        System.out.println(image);
+//        System.out.println(time);
+//        System.out.println(address);
+        int add = postService.add(userID, content, image, time, address);
+        if (add==1){
+            return new Result(222,"添加动态成功",add);
+        }
+        return new Result(444, "动态添加失败", null);
     }
 
     @GetMapping("/{postID}")

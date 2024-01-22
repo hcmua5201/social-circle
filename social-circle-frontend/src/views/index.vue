@@ -87,13 +87,13 @@
               </div>
               <div class="post-content">
                 <p>{{ post.content }}</p>
-                <img v-if="post.image" class="post-image" :src="post.image" @click="toggleFullscreen" alt="说说图片">
+                <img v-for="(image, index) in post.images" :key="index" class="post-image" :src="image" @click="toggleFullscreen" alt="说说图片">
               </div>
               <div class="post-footer">
                 <div class="left">
                   <!-- 显示发布时间 -->
                   <span class="post-time">🕑： {{ formatTime(post.time) }}</span><br>
-                  <span class="post-address">🏙️： 陕西·西安</span>
+                  <span class="post-address">🏙️： {{ post.address }}</span>
                 </div>
                 <div class="right">
                   <!-- 点赞和评论按钮 -->
@@ -194,10 +194,14 @@ export default {
       axios.get('/api/posts/all')  // 替换成实际的后端接口地址
           .then(response => {
             console.log(response.data.obj)
-            this.posts = response.data.obj;
+                this.posts = response.data.obj.map(post => {
+                  // 将post.image分割成数组，存储到post.images中
+                  post.images = post.image ? post.image.split(',') : [];
+                  return post;
+                });
           })
           .catch(error => {
-            console.error('Error fetching posts:', error);
+            console.error('查询接口出错:', error);
           });
     },
     async upDateComment() {

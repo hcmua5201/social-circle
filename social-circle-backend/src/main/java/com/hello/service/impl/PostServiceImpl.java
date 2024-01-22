@@ -20,6 +20,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public int add(Long userID, String content, String image, String time, String address) {
+        return postMapper.add(userID, content, image, time, address);
+    }
+
+    @Override
     public Post getPostByID(Long postID) {
         return postMapper.findByID(postID);
     }
