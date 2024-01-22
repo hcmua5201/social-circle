@@ -36,6 +36,8 @@
         </el-upload>
       </div>
     </div>
+    <span>🏙️地点:{{this.nowIpAddress}}</span>
+    <el-button @click="updateAddress" text>重新定位</el-button>
   </div>
 </template>
 
@@ -47,6 +49,7 @@ export default {
     return {
       content:'',
       images: [],
+      nowIpAddress:''
     };
   },
   created() {
@@ -109,7 +112,33 @@ export default {
           const prov = response.data.info.prov
           const city = response.data.info.city
           const address = country+'-'+prov+'-'+city
+          this.nowIpAddress=address
           localStorage.setItem("login_address",JSON.stringify(address))
+          console.log(address)
+        }else {
+          this.$message.error("当前登录状态ip异常,发表说说可能会有问题，请检查网络后重试")
+          this.$router.push("/index");
+        }
+      });
+    },
+    updateAddress(){
+      axios({
+        method: "get",
+        url: "https://api.vvhan.com/api/getIpInfo",
+      }).then((response) => {
+        console.log(response.data);
+        if (response.data.success === true){
+          const country = response.data.info.country
+          const prov = response.data.info.prov
+          const city = response.data.info.city
+          if (prov==='-'||city==='-'){
+             this.$message.info("请注意，非科学上网会影响定位呦")
+          }
+          const address = country+'-'+prov+'-'+city
+          this.nowIpAddress=address
+          localStorage.removeItem("login_address")
+          localStorage.setItem("login_address",JSON.stringify(address))
+          this.$message.success("定位已更新")
           console.log(address)
         }else {
           this.$message.error("当前登录状态ip异常,发表说说可能会有问题，请检查网络后重试")
