@@ -6,8 +6,6 @@ import publish from "../views/publish.vue"
 import admin from "../views/admin/view/admin.vue";
 import main_success from "../views/admin/components/main_success.vue";
 import shouye from "../views/shouye.vue";
-import register1 from "../views/register1.vue";
-import login1 from "../views/login1.vue";
 
 const router=createRouter({
     history:createWebHistory(),
@@ -18,11 +16,11 @@ const router=createRouter({
         },
         {
             path:'/login',
-            component:login1
+            component:login
         },
         {
             path:'/register',
-            component:register1
+            component:register
         },
         {
             path:'/index',
