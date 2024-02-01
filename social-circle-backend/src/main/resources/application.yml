@@ -14,6 +14,10 @@ spring:
       username: "root"
       password: "hello123456"
       driver-class-name: "com.mysql.cj.jdbc.Driver"
+      hikari:
+        minimum-idle: 5
+        maximum-pool-size: 20
+        max-lifetime: 1800000
   redis:
     database: 0
     host: 47.115.216.196
