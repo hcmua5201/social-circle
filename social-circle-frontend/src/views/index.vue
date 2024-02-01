@@ -35,11 +35,11 @@
                 <el-menu-item index="/admin/main_success">后台管理</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
-            <el-menu-item index="3">
+            <el-menu-item @click="ShowDialogVisible">
               <el-icon>
                 <document/>
               </el-icon>
-              <span>修改密码</span>
+              <span>个人中心</span>
             </el-menu-item>
             <el-menu-item @click="logout">
               <el-icon>
@@ -50,6 +50,23 @@
           </el-menu>
         </el-col>
       </el-drawer>
+
+      <el-dialog
+          v-model="dialogVisible"
+          title="个人信息"
+          width="50%"
+      >
+
+        <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">关闭</el-button>
+        <el-button type="primary" @click="dialogVisible = false">
+          修改
+        </el-button>
+      </span>
+        </template>
+      </el-dialog>
+
       <el-row class="background" :style="{ backgroundImage: 'url(' + user.backgroundImage + ')' }">
         <el-col :span="24">
           <!-- 用户头像放于背景右下角 -->
@@ -161,6 +178,7 @@ export default {
       isFullscreen: false,
       moreMenuStatus: false,
       selectedCommentId: -1,
+      dialogVisible:false
     };
   },
   created() {
@@ -174,6 +192,9 @@ export default {
     this.upDateComment();
   },
   methods: {
+    ShowDialogVisible(){
+     this.dialogVisible=!this.dialogVisible;
+    },
     toggleSidebar() {
       this.sidebarVisible = !this.sidebarVisible;
     },
@@ -640,4 +661,5 @@ img.post-avatar:hover {
 .fa-heart-o {
   color: black;
 }
+
 </style>

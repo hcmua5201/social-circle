@@ -7,6 +7,7 @@ import admin from "../views/admin/view/admin.vue";
 import main_success from "../views/admin/components/main_success.vue";
 import shouye from "../views/shouye.vue";
 
+
 const router=createRouter({
     history:createWebHistory(),
     routes:[
@@ -30,6 +31,7 @@ const router=createRouter({
             path:'/publish',
             component:publish
         },
+
         {
             path:'/admin',
             component:admin,
