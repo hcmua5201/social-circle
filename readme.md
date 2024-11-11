@@ -2,7 +2,7 @@
 
 一个基于 Spring Boot + Vue 的微信朋友圈社交网站前后端分离项目。
 
-> 开发者: [@hcmua5201](https://github.com/hcmua5201) & [@printdarling](https://github.com/printlndarling/)
+> 开发者: [@hcmua5201](https://github.com/hcmua5201) & [@printlndarling](https://github.com/printlndarling/)
 
 ## 🔨 功能描述
 
